@@ -35,20 +35,18 @@ window.onscroll = function (event) {
 
 window.addEventListener('scroll', function () {
     var scrollPosition = window.scrollY;
-    briefParallax(scrollPosition);
     parallaxEffect(scrollPosition);
 });
 
 function contentUpdate() {
-    sectionOffsetCheck(); // Re-calculate the offset position of each section
-
     try {
         console.log("Building plot");
         buildPlots();
     } catch (e) {
         console.warn(e);
     }
-
+    
+    sectionOffsetCheck(); // Re-calculate the offset position of each section
 }
 
 
@@ -67,19 +65,6 @@ function sectionOffsetCheck() {
     for (var i = 0; i < 4; i++) {
         sectionOffset[i] = allSections[i].offsetTop + 0.5;
         // console.log(i + ": " + allSections[i].offsetTop);
-    }
-}
-
-function briefParallax(scrollPosition) {
-    var text = document.querySelector('#brief > .main');
-    var distance = (scrollPosition - sectionOffset[1] + 64) / 15;
-
-    if (scrollPosition >= sectionOffset[1] - 64 && scrollPosition <= sectionOffset[1] + 500) {
-        text.style.top = distance + '%';
-        text.style.opacity = 1 - (distance / 25);
-    } else if (scrollPosition < sectionOffset[1] - 64) {
-        text.style.top = 0;
-        text.style.opacity = 1;
     }
 }
 
@@ -126,11 +111,9 @@ function parallaxSeaScale(scrollPosition, obj, movSpeed, startY, initialSize) {
     if (scrollPosition < bgPos) {
         obj.style.backgroundPosition = `47.5% ${startY}%`;
         obj.style.backgroundSize = `${initialSize}%`;
-        obj.style.filter = `blur(0px)`
     } else if (scrollPosition >= bgPos && scrollPosition <= bgPos + 1000) {
         obj.style.backgroundPosition = `47.5% ${startY + distance / 3}%`;
         obj.style.backgroundSize = `${initialSize + distance}%`;
-        obj.style.filter = `blur(${0 + distance / 15}px)`
     }
 }
 

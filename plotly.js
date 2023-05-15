@@ -273,7 +273,7 @@ function seafoodConsumption(selectedYear) {
 		var consumption_Txt = [];
 
 		// Fix the scale of the consumptionLst to avoid scale changes
-		var consumptionLst_Scaled = [-1]
+		var consumptionLst_Scaled = []
 		
 		consumptionLst.forEach(element => {
 			var txt = "No data found";
@@ -286,6 +286,9 @@ function seafoodConsumption(selectedYear) {
 			consumptionLst_Scaled.push(scaled_Value);
 			consumption_Txt.push(txt);
         });
+
+		// Fix the min value of the consumptionLst
+		consumptionLst_Scaled.push(-1);
 
 		const hover_Text = countryLst.map((name, index) => `Country: ${name} <br>Consumption per capita in ${selectedYear}: ${consumption_Txt[index]}`);
 
