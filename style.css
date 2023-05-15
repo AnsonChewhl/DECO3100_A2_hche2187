@@ -1,5 +1,6 @@
 /* To avoid the font not showing in some browsers https://stackoverflow.com/questions/36660893/css-open-sans-font */
-@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+/* With the proper font weight https://stackoverflow.com/questions/45114158/googles-open-sans-font-weight */
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700');
 
 html,
 body {
@@ -9,8 +10,7 @@ body {
 
 	background-color: #212121;
 
-	font-family: 'Open Sans';
-	/* Creates friendly vibe */
+	font-family: 'Open Sans', sans-serif; /* Creates friendly vibe */
 	font-style: normal;
 
 	overflow-x: hidden;
