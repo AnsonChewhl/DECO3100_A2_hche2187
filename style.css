@@ -18,6 +18,7 @@ body {
 
 h2 {
 	position: relative;
+	width: 90%;
 
 	font-family: 'Fjalla One';
 	font-style: normal;
@@ -56,13 +57,34 @@ p {
 	text-align: center;
 }
 
-.plot {
-	width: 100%;
+.plotly-container {
+	width: 90%;
+	height: 800px;
+	margin: auto;
+	position: relative;
+}
 
+.plot-header {
+	position: absolute;
+	width: 80%;
+	
+	left: 50%;
+	transform: translate(-50%, 0);
+
+	font-size: 18px;
+	font-weight: 400;
+	text-align: center;
+	color: #8E8E8E;
+}
+
+.plot {
 	position: relative;
 	display: flex;
 	align-items: center;
 	justify-content: center;
+
+	width: 100%;
+	height: 100%;
 }
 
 .section-bg {
@@ -72,6 +94,7 @@ p {
 	top: 0;
 }
 
+/* Creating a mask that can apply gradient colour */
 .section-bg::before {
 	content: "";
 	position: absolute;
@@ -109,12 +132,23 @@ p {
 
 /* Slider function from https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_rangeslider */
 .slidecontainer {
+	position: relative;
 	padding-top: 3vh;
 	padding-bottom: 5vh;
 	width: 60%; /* Width of the outside container */
 	margin: auto;
 
 	text-align: center;
+}
+
+.slidecontainer > span {
+	position: absolute;
+	top: 54.5%;
+	left: -3%;
+	transform: translate(0, -50%);
+
+	font-size: 32px;
+	color: #fff;
 }
 
 /* The slider itself */
@@ -185,6 +219,17 @@ p {
 	color: #fff;
 }
 
+@media screen and (max-width: 1024px) {
+	.plotly-container {
+		height: 650px;
+	}
+}
+
+@media screen and (max-width: 848px) {
+	.plotly-container {
+		height: 550px;
+	}
+}
 /* End of default properties */
 
 
@@ -247,6 +292,7 @@ p {
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-attachment: fixed;
+    background-position: center center;
 
 	z-index: -1;
 }
@@ -413,7 +459,7 @@ p {
 }
 
 #brief {
-	height: 150vh;
+	min-height: 100vh;
 	position: relative;
 	overflow: hidden;
 }
@@ -423,27 +469,78 @@ p {
 	font-size: 36px;
 }
 
-#brief>.main>h2,
-#brief strong {
+#brief>.main>h2, #brief strong {
 	color: #002E47;
 }
 
 #brief>.main>p {
 	width: 70%;
-	color: #8E8E8E;
+	color: #707070;
+}
+
+#brief>.main>div {
+	position: absolute;
+    top: 15%;
+    bottom: 0;
+
+    left: 7%;
+	width: 70%;
+
+    z-index: -1;
+    background-color: rgba(210, 210, 210, 0.7);
+
+	filter: blur(2px);
+	border-radius: 5px;
 }
 
 #brief-bg {
 	background-image: url("image/section_background/bg.png");
 	background-size: cover;
 	width: 100%;
+
+	/* https://developer.mozilla.org/en-US/docs/Web/CSS/background-position-y */
+	background-position-x: center;
+	background-position-y: bottom;
 }
 
 #brief-bg::before {
 	background: linear-gradient(165deg, rgba(0, 49, 95, 0) 80%, #0A2745 85%);
 }
 
-/* End of landing section */
+@media screen and (max-width: 1440px) {
+	#landing h1 {
+		width: 90%;
+	}
+
+	#brief>.main>h2 {
+		width: 85%;
+	}
+	
+	#brief>.main>p {
+		width: 80%;
+	}
+	
+	#brief>.main>div {
+		width: 82.5%;
+	}
+}
+
+@media screen and (max-width: 1260px) {
+	#landing h1 {
+		font-size: 82px;
+	}
+}
+
+@media screen and (max-width: 1024px) {
+	#brief>.main>p {
+		width: 95%;
+	}
+	
+	#brief>.main>div {
+		width: 90%;
+	}
+}
+/* End of home section */
 
 
 
@@ -452,13 +549,52 @@ p {
 
 #problem-cause {
 	margin: 0;
+	padding-bottom: 10vh;
 	position: relative;
-	height: 120vh;
 	background: linear-gradient(0deg, rgba(0, 0, 0, 0.95) 0%, #0A2745 100%);
 }
 
 #problem-cause > div.main.centerTxt {
 	padding-top: 7vh;
+}
+
+#plot-colorbar {
+	height: 2vh;
+	width: 70%;
+	padding-top: 3vh;
+	margin: auto;
+	
+	display: flex;
+	align-items: stretch;
+}
+
+#plot-colorbar > span {
+	/* Equally distribute within the container https://stackoverflow.com/questions/29467660/how-to-stretch-children-to-fill-cross-axis */
+	display: block;
+	height: 1.5vh;
+	flex: 1;
+
+	border: 0.5px solid rgb(255, 255, 255);
+}
+
+#plot-colorbar > span:hover {
+	border: 3px solid rgb(255, 255, 255);
+}
+
+#plot-colorbar > span > p {
+	width: 100%;
+	text-align: center;
+	font-size: 1.25vh;
+}
+
+@media screen and (max-width: 1024px) {
+	#problem-cause > div.main.centerTxt > p{
+		width: 85%;
+	}
+
+	#plot-colorbar {
+		width: 90%;
+	}
 }
 /* End of background section */
 
@@ -472,13 +608,37 @@ p {
 }
 
 #threaten-species {
-	height: 100vh;
 	position: relative;
 	overflow: hidden;
 }
 
+#threaten-species > .checkbox-container {
+	/* Center the container */
+	width: 80%;
+	margin: auto;
+
+	display: grid;
+	grid-template-columns: 25% 25% 25%;
+	row-gap: 3vh;
+	justify-content: space-evenly;
+	align-items: center;
+}
+
+.checkbox-container > div {
+	height: 6vh;
+	width: 100%;
+	background-color: #001b29;
+	border-radius: 5px;
+
+	display: flex;
+	align-items: center;
+}
+
+.checkbox-container > div > .checkbox,  .checkbox > label {
+	padding-left: 1vw;
+}
+
 #population-trend {
-	height: 60vh;
 	padding-bottom: 3vh;
 	position: relative;
 	overflow: hidden;
@@ -499,36 +659,86 @@ p {
 	width: 100%;
 }
 
-#news {
-	min-height: 65vh;
+#population-trend>div>.plotly-container {
+	width: 100%; 
+	height: 450px;
+
+	/* Generated with https://cssgrid-generator.netlify.app/ */
+	grid-area: 1 / 2 / 3 / 3;
+}
+
+.recommendation {
+	min-height: 450px;
 	display: flex;
 	justify-content: center;
 	margin-bottom: 10vh;
 	gap: 5vw;
 }
 
-#news>div {
+.recommendation>div {
 	width: 20%;
 	padding: 3vh 1.5vw;
 	border: 3px solid #103C68;
 	border-radius: 5px;
 }
 
-#news>div>img {
+.recommendation>div>img {
 	width: 100%;
 	border-radius: 3px;
 }
 
-#news>div>h3 {
+.recommendation>div>h3 {
 	color: #FF9900;
 	font-size: 24px;
 	font-weight: 600;
 }
 
-#news>div>p {
+.recommendation>div>p {
 	width: 100%;
 	font-size: 16px;
 	line-height: 200%;
+}
+
+@media screen and (max-width: 1440px) {
+	#population-trend>div {
+		display: flex;
+		flex-direction: column;
+		padding: 5.5vh 0 1vh 0;
+	}
+
+	#population-trend>div>.main {
+		padding: 5.5vh 0 1vh 10%;
+	}
+
+	#population-trend>div>.main>p {
+		width: 85%;
+	}
+}
+
+@media screen and (max-width: 1260px) {
+	.recommendation {
+		flex-direction: column;
+	}
+
+	.recommendation>div {
+		width: 75%;
+		margin: auto;
+	}
+
+	.recommendation>div>img {
+		height: 50vh;
+		object-fit: cover;
+	}
+}
+
+@media screen and (max-width: 848px) {
+	#threaten-species > .plotly-container {
+		width: 90% !important;
+	}
+
+	#threaten-species > .checkbox-container {
+		width: 90%;
+	}
 }
 
 /* End of situation section */
@@ -542,9 +752,22 @@ p {
 }
 
 #seafood-demand {
-	height: 150vh;
 	position: relative;
 	overflow: hidden;
+}
+
+#trend-plot {
+	display: none;
+
+	/* Avoid hover event https://www.w3docs.com/snippets/css/how-to-remove-the-css-hover-behavior-from-an-element.html */
+	pointer-events: none;
+
+	position: absolute;
+	transform-origin: center;
+	height: 20vh;
+	z-index: 3;
+
+	border: 1px solid rgb(255, 255, 255);
 }
 
 #biodiversity-loss {

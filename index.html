@@ -47,7 +47,7 @@
 			<div id="parallax-bag"> </div>
 
 			<div class="non-parallax-obj"
-				style="background-image: url('image/parallax-effect/bottle.png'); transform: translate3d(770px, 1400px, 0px) rotate(-30deg) scale(0.15); 	filter: blur(10px);">
+				style="background-image: url('image/parallax-effect/bottle.png'); transform: translate3d(770px, 1400px, 0px) rotate(-30deg) scale(0.15); filter: blur(10px);">
 			</div>
 			<div class="non-parallax-obj"
 				style="background-image: url('image/parallax-effect/bottle.png'); transform: translate3d(-480px, 1750px, 0px) rotate(-45deg) scale(0.15);">
@@ -61,20 +61,21 @@
 			</div>
 		</div>
 
-		<article id="home"  class="main-section">
+		<article id="home" class="main-section">
 			<section id="landing">
 				<h1> Impacts of Plastic Pollution on Biodiversity </h1>
 				<div id="landing-bg" class="section-bg"></div>
 			</section>
-	
+
 			<section id="brief">
 				<div class="main">
-					<h2> Take a guess... How long does it take to decompose plastic? </h2>
+					<h2>Take a guess... How long does it take to decompose plastic? </h2>
 					<p>Although only <strong>only 3%</strong> of the waste in the landfill is plastic waste (Australia
 						Bureau of Statistics, 2020), it can take up to <strong>450 years</strong> to decompose a plastic
 						bag (Goodfor Company, n.d.). Additionally, <strong>less than 10%</strong> of the consumed
 						plastic was recycled (McLaren, 2021). The low recycling rate means there was a high proportion
 						sent to landfill, or was left on the land and ocean.</p>
+					<div></div>
 				</div>
 				<div id="brief-bg" class="section-bg"></div>
 			</section>
@@ -86,10 +87,15 @@
 					<p>Have you ever seen any plastic bottles when walking on the beach? Where do you think they came
 						from? It’s common to see plastic floating in the ocean and no one may report it. Thus, the
 						amount of plastic in surface waters is not very well known. However, in estimation, the amount
-						ranges from 10,000 to 100,000 tonnes (Our World In Data, n.d.). Let’s check how much MPW (mismanaged 
-						plastic waste) each country emitted in 2021.</p>
+						ranges from 10,000 to 100,000 tonnes (Our World In Data, n.d.). Let’s check how much MPW
+						(mismanaged plastic waste) each country emitted in 2021.</p>
 				</div>
-				<div class="plot" id=""></div>
+				<div class="plotly-container">
+					<h3 class="plot-header">Amount of mismanaged plastic waste emitted to the ocean (2021)</h3>
+					<div class="plot" id="plastic-pollution-plot"></div>
+				</div>
+				<div id="plot-colorbar">
+				</div>
 			</section>
 
 			<div class="session-break"> You may wonder... Why does it matter? </div>
@@ -109,10 +115,13 @@
 						and being considered endangered (facing a very high risk of extinction). Fishes are the only
 						animal groups that have over 3000 species threatened with extinction. Numerous causes devastate
 						their population, such as climate change and water pollution. Plastic pollution is threatening
-						their
-						size as it degrades the water quality (IUCN, 2022).</p>
+						their size as it degrades the water quality (IUCN, 2022).</p>
 				</div>
-				<div class="plot" id=""></div>
+				<div class="plotly-container" style="width: 80%; height: 600px;">
+					<div class="plot" id="threaten-species-plot"></div>
+				</div>
+				<div class="checkbox-container">
+				</div>
 			</section>
 
 			<section id="population-trend">
@@ -123,26 +132,29 @@
 							largest hard-shelled turtle) are listed as endangered. Additionally, according to Condor
 							Ferries (n.d.), over 1 million seabirds and 100,000 marine species die from plastic
 							pollution every year. Plastic has been found in more than 60% of all seabirds and in 100% of
-							sea turtles species that mistake plastic for food (Ocean Conservancy, n.d.). <br> <br>
-							Besides that, there are a number of whales threatened by plastic pollution, such as blue
+							sea turtles species that mistake plastic for food (Ocean Conservancy, n.d.).</p>
+					</div>
+					<div class="plotly-container">
+						<h3 class="plot-header">Marine species threatened by waste pollution (Population trend)</h3>
+						<div class="plot" id="population-trend-plot"></div>
+					</div>
+					<div class="main">
+						<p>Besides that, there are a number of whales threatened by plastic pollution, such as blue
 							whales, the largest animal known to ever exist. How are they affected? ABC news (2018)
 							reported that a sperm whale was washed up on a beach in Spain and died due to nearly 30 kg
 							of trash, including plastic, that blocked its digestive system.</p>
 					</div>
-					<div class="plot" id=""></div>
 				</div>
 			</section>
 
-			<section id="news">
+			<section class="recommendation">
 				<div>
 					<img alt="" src="image/section_situation/news/news1.png">
 					<h3>About 70% of deep sea fishes mistake plastic for food</h3>
 					<p>WWF revealed that 70% of deep-sea fish (e.g. tuna, grouper & shark) have eaten plastic.
 						Furthermore, it was proved that some popular dinner time favourites (e.g. oysters, mussels &
 						sardines) consumed plastic when they were at the fisheries.</p>
-					<a class="learn-more"
-						href="https://wwf.org.au/blogs/plastic-fish-and-the-great-pacific-garbage-patch/"
-						target="_blank">Why fishes consume and eat plastic >></a>
+					<a class="learn-more" href="https://wwf.org.au/blogs/plastic-fish-and-the-great-pacific-garbage-patch/" target="_blank">Why fishes consume and eat plastic >></a>
 				</div>
 				<div>
 					<img alt="" src="image/section_situation/news/news2.png">
@@ -150,9 +162,7 @@
 					<p>Apart from mistaking plastic for food, some marine species are entangled by plastic, especially
 						abandoned fishing gear. Those species cannot breathe when they are entangled in plastic. Then,
 						the entanglement kills them through drowning.</p>
-					<a class="learn-more"
-						href="https://wwf.org.au/blogs/plastic-in-our-oceans-is-killing-marine-mammals/"
-						target="_blank">Abandoned fishing gear impacts >></a>
+					<a class="learn-more" href="https://wwf.org.au/blogs/plastic-in-our-oceans-is-killing-marine-mammals/" target="_blank">Abandoned fishing gear impacts >></a>
 				</div>
 				<div>
 					<img alt="" src="image/section_situation/news/news3.png">
@@ -178,16 +188,22 @@
 			<section id="seafood-demand">
 				<div class="main">
 					<h2>An increasing demand for seafood worldwide</h2>
-					<p>As you can see from the data below, our demand for seafood has been increasing throughout the
+					<p>As you can see from the data below, our demand for seafood has increased a lot throughout the
 						past thirty years. Undoubtedly, this uptrend will continue in the future. Besides, we should
 						notice this as a signal that we have to keep the marine clean and safe. It is because there is
 						evidence that microplastics and nanoplastics (tiny, almost undetectable, pieces of plastic) can
 						move from a fish’s stomach to its muscle tissue, which is the part that we typically eat
 						(McInturf & Savoca, 2019).</p>
 				</div>
-				<div class="plot" id=""></div>
+				<div class="plotly-container">
+					<h3 class="plot-header">Global fish & seafood consumption per capita from 1990 to 2020</h3>
+					<div class="plot" id="seafood-demand-plot"></div>
+					<div id="trend-plot"></div>
+				</div>
 				<div class="slidecontainer">
 					<div id="yearDisplay">2020</div>
+					<!-- Play symbol unicode https://www.compart.com/en/unicode/U+23F5 -->
+					<span onclick="consumptionAnimation()">&#9205;</span>
 					<input type="range" min="1990" max="2020" value="2020" class="slider">
 				</div>
 				<div class="main" style="padding: 1.5vh 0 1vh 10%;">
@@ -199,7 +215,7 @@
 				</div>
 			</section>
 
-			<section id="biodiversity-loss">
+			<section>
 				<div class="main">
 					<h2> So, what can we do? </h2>
 					<p>Everyone can do something to help solve the plastic pollution problem, and a lot of people
@@ -210,16 +226,14 @@
 				</div>
 			</section>
 
-			<section id="news">
+			<section class="recommendation">
 				<div>
 					<img alt="" src="image/section_impact/3rs/reduce.png">
 					<h3>Using sustainable alternatives to single-use plastics</h3>
 					<p>WWF revealed that 70% of deep-sea fish (e.g. tuna, grouper & shark) have eaten plastic.
 						Furthermore, it was proved that some popular dinner time favourites (e.g. oysters, mussels &
 						sardines) consumed plastic when they were at the fisheries.</p>
-					<a class="learn-more"
-						href="https://www.boredpanda.com/plastic-bottle-recycling-ideas/?utm_source=google&utm_medium=organic&utm_campaign=organic"
-						target="_blank">More sustainable selections >></a>
+					<a class="learn-more" href="https://learn.eartheasy.com/guides/the-best-eco-friendly-alternatives-for-the-plastic-in-your-life/" target="_blank">More sustainable selections >></a>
 				</div>
 				<div>
 					<img alt="" src="image/section_impact/3rs/reuse.png">
@@ -227,9 +241,7 @@
 					<p>Apart from mistaking plastic for food, some marine species are entangled by plastic, especially
 						abandoned fishing gear. Those species cannot breathe when they are entangled in plastic. Then,
 						the entanglement kills them through drowning.</p>
-					<a class="learn-more"
-						href="https://www.boredpanda.com/plastic-bottle-recycling-ideas/?utm_source=google&utm_medium=organic&utm_campaign=organic"
-						target="_blank">Creative ideas to reuse plastic >></a>
+					<a class="learn-more" href="https://www.boredpanda.com/plastic-bottle-recycling-ideas/?utm_source=google&utm_medium=organic&utm_campaign=organic" target="_blank">Creative ideas to reuse plastic >></a>
 				</div>
 				<div>
 					<img alt="" src="image/section_impact/3rs/recycle.png">
@@ -237,8 +249,7 @@
 					<p>Plastic releases greenhouse gases during the manufacturing and biodegrading process. Greenhouse
 						gases may increase the frequency of extreme weather, which threatens not only marine life but
 						also the whole ecosystem and us.</p>
-					<a class="learn-more" href="https://returnandearn.org.au/" target="_blank">Return & Earn in
-						Australia >></a>
+					<a class="learn-more" href="https://returnandearn.org.au/" target="_blank">Return & Earn in Australia >></a>
 				</div>
 			</section>
 

@@ -38,6 +38,11 @@ window.addEventListener('scroll', function () {
     parallaxEffect(scrollPosition);
 });
 
+
+
+
+
+// Main functions
 function contentUpdate() {
     try {
         console.log("Building plot");
@@ -49,12 +54,12 @@ function contentUpdate() {
     sectionOffsetCheck(); // Re-calculate the offset position of each section
 }
 
-
-
-
-
-// Main functions
-
+function buildPlots() {
+	plasticPollution(generateColorScale());
+	threatenedSpecies();
+	marineSpeciesPopulation();
+    seafoodConsumption(2020);
+}
 
 
 
@@ -145,7 +150,30 @@ const yearSelectore = document.querySelector('.slidecontainer > .slider');
 yearSelectore.addEventListener('input', yearIndicator);
 function yearIndicator() {
     var year = yearSelectore.value;
+
     yearDisplay = document.getElementById('yearDisplay');
     yearDisplay.innerHTML = year;
     seafoodConsumption(year);
+}
+
+var consumptionAnimating = false;
+function consumptionAnimation() {
+    if (!consumptionAnimating) {
+        consumptionAnimating = true;
+
+        var value = 1990;
+        yearSelectore.value = value;
+        yearIndicator();
+    
+        // Using set interval to create animation https://www.w3schools.com/jsref/met_win_setinterval.asp
+        var animation = setInterval(function() {
+            value += 1
+            yearSelectore.value = value;
+            yearIndicator();
+            if (value >= 2020) {
+                clearInterval(animation);
+                consumptionAnimating = false;
+            }
+        }, 300);
+    }
 }
