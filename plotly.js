@@ -1,4 +1,4 @@
-var checkboxGenerated = false;
+// A function to unwrap the data, learnt from DECO3100 tutorial class
 const unpack = (data, key) => data.map(row => row[key]);
 
 
@@ -14,7 +14,7 @@ function plasticPollution(colorScale) {
 		const location = unpack(data, 'Code');
 		const mpw = unpack(data, 'MPW');
 
-		// As the amount of MPW of Philippines is too high and skews the charge, scaling it down for better visualisation would help 
+		// As the amount of MPW of Philippines is too high and skews the chart, I scaled the color bar for better visualisation
 		var mpw_Scaled = scaleColorbar(mpw);
 
 		// Create custom hover text to fix the null data text
@@ -26,7 +26,7 @@ function plasticPollution(colorScale) {
 			mpw_Txt.push(txt);
 		});
 
-		const hover_Text = country.map((name, index) => ` Country: ${name}<br> MPW released into oceans: <b>${mpw_Txt[index]}</b> `);
+		const hover_Text = country.map((name, index) => ` Country: ${name} <br> MPW released into oceans: <b>${mpw_Txt[index]}</b> `);
 
 		const chart_data = [{
 			type: 'choropleth',
@@ -35,13 +35,17 @@ function plasticPollution(colorScale) {
 
 			// Making no data object different color, concept from https://community.plotly.com/t/visually-marking-numpys-nan-as-grey/17007/2
 			colorscale: colorScale,
+			
 			marker: {
 				line: {
 					color: 'rgb(255,255,255)',
 					width: 0.3
 				}
 			},
-			showscale: false, // Hide the colorbar and create a new one by myself
+			
+			// Hide the colorbar and create a new one by myself
+			showscale: false, 
+
 			text: hover_Text,
 			hovertemplate: '%{text}<extra></extra>',
 		}];
@@ -51,7 +55,10 @@ function plasticPollution(colorScale) {
 				showframe: false,
 				bgcolor: 'rgba(0,0,0,0)',
 				projection: { type: 'mercator' },
-				lataxis: { range: [-3, 90] } // hide Antartica as it has no data to show, this allows users to focus on the main objects
+
+				// Hide Antartica as it has no data to show, this allows users to focus on the main objects 
+				// Concept inspired by https://stackoverflow.com/questions/73999494/how-to-remove-antarctica-from-plotly-world-map
+				lataxis: { range: [-3, 90] } 
 			},
 			margin: {
 				l: 0,
@@ -62,7 +69,9 @@ function plasticPollution(colorScale) {
 			responsive: true,
 			paper_bgcolor: 'rgba(0,0,0,0)',
 			plot_bgcolor: 'rgba(0,0,0,0)',
-			dragmode: false // fix the plot to disable default scroll / drag movement (users can still do so by using the pan function)
+
+			// Fix the plot to disable default scroll / drag movement (users can still do so by using the pan function)
+			dragmode: false 
 		};
 
 		Plotly.newPlot(plotDiv, chart_data, chart_layout);
@@ -191,11 +200,12 @@ function threatenedSpecies() {
 			showlegend: false,
 			paper_bgcolor: 'rgba(0,0,0,0)',
 			plot_bgcolor: 'rgba(0,0,0,0)',
-			dragmode: false // fix the plot to disable default scroll / drag movement (users can still do so by using the pan function)
+			dragmode: false
 		};
 
 		Plotly.newPlot(plotDiv, chart_data, chart_layout);
 
+		// Create the checkbox to allow users deselect any animal groups
 		if (!checkboxGenerated) {
 			generateCheckbox(group, colorGroup)
 		}
@@ -216,7 +226,8 @@ function marineSpeciesPopulation() {
 			values: number,
 
 			textfont: {
-				color: "#fff" // Change the text color to increase readability and accessibility https://community.plotly.com/t/pie-chart-label-colors/10595
+				// Change the text color to increase readability and accessibility https://community.plotly.com/t/pie-chart-label-colors/10595
+				color: "#fff"
 			},
 			textinfo: "label+percent",
 
@@ -252,7 +263,8 @@ function marineSpeciesPopulation() {
 		};
 
 		const config = {
-			displayModeBar: false, // this is the line that hides the bar
+			 // Only display the chart and hide other display elements
+			displayModeBar: false
 		};
 
 		Plotly.newPlot(plotDiv, chart_data, chart_layout, config);
@@ -263,7 +275,9 @@ function seafoodConsumption(selectedYear) {
 	Plotly.d3.csv("csv/seafood-consumption.csv", data => {
 		const plotDiv = document.getElementById('seafood-demand-plot');
 
+		// Check any missed data from all countries (1990-2020)
 		if (!addedMissedData) addMissedData(data);
+
 		const country = seafoodConsumptionData[0];
 		const location = seafoodConsumptionData[1];
 		const year = seafoodConsumptionData[2];
@@ -341,7 +355,7 @@ function seafoodConsumption(selectedYear) {
 				showframe: false,
 				bgcolor: 'rgba(0,0,0,0)',
 				projection: { type: 'mercator' },
-				lataxis: { range: [-3, 90] } // hide Antartica as it has no data to show, this allows users to focus on the main objects
+				lataxis: { range: [-3, 90] }
 			},
 			margin: {
 				l: 0,
@@ -352,7 +366,7 @@ function seafoodConsumption(selectedYear) {
 			responsive: true,
 			paper_bgcolor: 'rgba(0,0,0,0)',
 			plot_bgcolor: 'rgba(0,0,0,0)',
-			dragmode: false // fix the plot to disable default scroll / drag movement (users can still do so by using the pan function)
+			dragmode: false
 		};
 
 		Plotly.newPlot(plotDiv, chart_data, chart_layout);
@@ -364,42 +378,20 @@ function seafoodConsumption(selectedYear) {
 
 
 /* Additional chart */
-// function pollutionComparison(data) {
-// 	const plotDiv = document.querySelector('#problem-cause > .plot');
-
-// 	var trace1 = {
-// 		x: data,
-// 		type: 'box',
-// 		boxpoints: 'suspectedoutliers'
-// 	};
-
-// 	var selectedCountry = {
-// 		x: [4.5],
-// 		type: 'scatter',
-// 		mode: 'markers',
-// 		name: 'Specific Point'
-// 	};
-
-// 	var chart_data = [trace1, selectedCountry];
-
-// 	var chart_layout = {
-// 		title: 'Horizontal Box Plot'
-// 	};
-
-// 	Plotly.newPlot(plotDiv, chart_data, chart_layout);
-// }
-
 const isHover = e => e.parentElement.querySelector(':hover') === e;
 const seafoodConsumptionPlot = document.querySelector('#seafood-demand > .plotly-container > .plot');
 const trendPlot = document.getElementById('trend-plot');
 document.addEventListener('mousemove', function checkHover() {
-	// https://stackoverflow.com/questions/14795099/pure-javascript-to-check-if-something-has-hover-without-setting-on-mouseover-ou
+	// Check if the chart is hovered https://stackoverflow.com/questions/14795099/pure-javascript-to-check-if-something-has-hover-without-setting-on-mouseover-ou
 	if (isHover(seafoodConsumptionPlot)) {
 		const hoverTemplate = document.querySelector('.hovertext > .nums');
+		
+		// If any country is hovered and the hover template is showing, create a new chart that shows the country consumption trend
 		if (hoverTemplate != null) {
 			var country = hoverTemplate.firstChild.innerHTML.split(': ')[1];
+			var reverse = hoverTemplate.firstChild.getAttribute("x") < 0;
 			trendPlot.style.display = "block";
-			consumptionTrend(country);
+			consumptionTrend(country, reverse);
 		} else {
 			trendPlot.style.display = "none";
 		}
@@ -410,11 +402,11 @@ document.addEventListener('mousemove', function checkHover() {
 	}
 });
 
-function consumptionTrend(selectedCountry) {
+function consumptionTrend(selectedCountry, reverse) {
 	const plotDiv = document.getElementById('trend-plot');
 	const hoverTemplate = document.querySelector('.hovertext');
 
-	// https://stackoverflow.com/questions/294250/how-do-i-retrieve-an-html-elements-actual-width-and-height
+	// Get the hover template position https://stackoverflow.com/questions/294250/how-do-i-retrieve-an-html-elements-actual-width-and-height
 	var width = hoverTemplate.getBoundingClientRect().width;
 	var height = hoverTemplate.getBoundingClientRect().height;
 	var transform = hoverTemplate.getAttribute("transform");
@@ -425,8 +417,10 @@ function consumptionTrend(selectedCountry) {
 	var x = parseFloat(matches[0]);
 	var y = parseFloat(matches[1]);
 
+	// Set the size of the plot
 	plotDiv.style.width = width + "px";
-	plotDiv.style.left = x + "px";
+	if (reverse) plotDiv.style.left = x - width + "px";
+	else plotDiv.style.left = x + "px";
 	plotDiv.style.top = y + height + "px";
 	
 	Plotly.d3.csv("csv/seafood-consumption.csv", data => {
@@ -459,7 +453,6 @@ function consumptionTrend(selectedCountry) {
 				y: 0.9,
 			},
 			xaxis: {
-				// Avoid the year be treated as number https://community.plotly.com/t/use-a-list-of-number-string-as-xaxis/18876/3
 				type: 'category',
 				gridcolor: 'rgba(0,0,0,0)',
 				color: "#8E8E8E"
@@ -478,11 +471,11 @@ function consumptionTrend(selectedCountry) {
 			},
 			paper_bgcolor: '#212121',
 			plot_bgcolor: '#212121',
-			dragmode: false // fix the plot to disable default scroll / drag movement (users can still do so by using the pan function)
+			dragmode: false
 		};
 
 		const config = {
-			displayModeBar: false, // this is the line that hides the bar
+			displayModeBar: false
 		};
 
 		Plotly.newPlot(plotDiv, chart_data, chart_layout, config);
@@ -496,6 +489,7 @@ const mpwMax = [300000, 100000, 70000, 50000, 30000, 20000, 10000, 5000, 3000, 1
 const colorbarContainer = document.getElementById("plot-colorbar");
 const mpwColorbar = ['#107400', '#0CF23A', '#7FB057', '#98F97D', '#E2C768', '#FCDD2B', '#ED993D', '#FF8500', '#D74848', '#FA1717', '#AC4AB5', '#740090'];
 function scaleColorbar(mpw) {
+	// A function to allocate color for the country based on its mpw
 	var mpwLst = [];
 	mpw.forEach(element => {
 		var new_Mpw = -1;
@@ -518,11 +512,13 @@ function generateColorScale(selected) {
 	// Thus, I can simply use the array of [0.0000034, #fff] to set the colorscale of country that has 1 tons mpw
 	var colorScale = [];
 
-	// To make the colorscale array valid, I have to start from small number (0.1) to big number (1)
+	// To make the colorscale array valid, I have to start from small number (0.000000001) to big number (1)
 	var lastPercent = 0.00000001;
 
 	// Setting a dark grey color for countries that have no data (-1)
+	// The starting position of the color: 0
 	colorScale.push([0, 'rgb(30, 30, 30)']);
+	// The ending position of the color: lastPercent
 	colorScale.push([lastPercent, 'rgb(30, 30, 30)']);
 
 	for (var i = mpwMax.length - 1; i >= 0; i--) {
@@ -533,6 +529,7 @@ function generateColorScale(selected) {
 
 		var percent = mpwMax[i] / mpwMax[0];
 
+		// To ensure all the countries that have very little MPW being included
 		if (i == (mpwMax.length - 1)) { percent *= 2; }
 
 		// A function to ensure that the percent is actually greater than the actual
@@ -548,6 +545,7 @@ function generateColorScale(selected) {
 }
 
 function addDecimal(num) {
+	// A function to ensure that the percent is actually greater than the actual (e.g. 0.34 -> 0.35)
 	if (num >= 1) return num;
 
 	const decimal = num.toString().split('.')[1] || '';
@@ -556,6 +554,7 @@ function addDecimal(num) {
 	// Formula created by myself but Concept inspired by https://www.tutorialspoint.com/How-can-I-round-a-number-to-1-decimal-place-in-JavaScript
 	// Avoid no digit after the first digit
 	const numStr = num.toFixed(decimalPlaces + 1).toString().split(".")[1].split("");
+
 	var newNum = [0, "."];
 	for (var i = 0; i < numStr.length; i++) {
 		// First digit find
@@ -583,6 +582,7 @@ function addDecimal(num) {
 }
 
 function numAbbr(num) {
+	// A function to make the display into abbr form (e.g. 10000 -> 10k)
 	// Formula created by myself but inspired by https://stackoverflow.com/questions/2685911/is-there-a-way-to-round-numbers-into-a-reader-friendly-format-e-g-1-1k
 	var numSplit = num.toString().split('');
 	var newNum = [];
@@ -602,7 +602,7 @@ function generateColorbar() {
 		var color = document.createElement("span");
 		color.style.backgroundColor = mpwColorbar[i];
 
-		// Hover effect to focus -> Inspired by https://ourworldindata.org/plastic-pollution#
+		// Hover effect to focus inspired by this website https://ourworldindata.org/plastic-pollution#
 		// Onmouseover & onmouseout https://www.w3schools.com/jsref/event_onmouseover.asp
 		color.onmouseover = highlightPlot;
 		color.onmouseout = highlightPlot;
@@ -615,15 +615,18 @@ function generateColorbar() {
 }
 
 function highlightPlot() {
+	// Only color the countries that match user hover selection from the colorbar
 	const colorBarLst = document.querySelectorAll("#plot-colorbar > span");
 	for (var i = 0; i < colorBarLst.length; i++) {
-		// Check if matches https://stackoverflow.com/questions/14795099/pure-javascript-to-check-if-something-has-hover-without-setting-on-mouseover-ou
+		// Check if matches user hover element https://stackoverflow.com/questions/14795099/pure-javascript-to-check-if-something-has-hover-without-setting-on-mouseover-ou
 		if (colorBarLst[i].matches(':hover')) {
+			// Generate a new color scale that only colors the countries that match the color
 			plasticPollution(generateColorScale(i));
 			return;
 		}
 	}
 
+	// If user mouse no longer hover any color bar, reset the graph
 	plasticPollution(generateColorScale());
 }
 
@@ -655,7 +658,9 @@ function linearRegression(y, x) {
 	return lr;
 }
 
+var checkboxGenerated = false;
 function generateCheckbox(lst, colorGroup) {
+	// Generate checkboxs for each animal group and color them with their color on the plot
 	const container = document.querySelector(".checkbox-container");
 	for (var i = 0; i < lst.length; i += 3) {
 		let parent = document.createElement("div");
@@ -680,12 +685,15 @@ function generateCheckbox(lst, colorGroup) {
 		input.onchange = threatenedSpecies;
 		container.appendChild(parent);
 	}
+
+	// Stop generating new checkbox when building the plot
 	checkboxGenerated = true;
 }
 
 var addedMissedData = false;
 let seafoodConsumptionData = [];
 function addMissedData(data) {
+	// Add back the countries that have data in any year but not all from 1990 to 2020
 	var country = unpack(data, 'Entity');
 	var location = unpack(data, 'Code');
 	var year = unpack(data, 'Year');

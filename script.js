@@ -1,23 +1,18 @@
+// Check the users window width and height for testing purpose
+confirm(`Window width x height: ${window.innerWidth} x ${window.innerHeight}`);
+
+// Functions to call when the page finishes loading
+document.addEventListener('DOMContentLoaded', contentUpdate);
+
+// Ensure the plots are correctly built even when the users have resized their screen
+window.addEventListener('resize', contentUpdate, true);
+
+// Variables for jumping to different sections
 const allNavLinks = document.querySelectorAll(".navbar-link");
 const allSections = document.querySelectorAll(".main-section");
 let sectionOffset = [0, 0, 0, 0];
 let currentSection = 0;
-
-
-
-
-
-
-// Functions to call when the page finishes loading
-document.addEventListener('DOMContentLoaded', function () {
-    contentUpdate();
-});
-
-window.addEventListener('resize', function (event) {
-    contentUpdate();
-}, true);
-
-window.onscroll = function (event) {
+window.onscroll = () => {
     // console.log(window.pageYOffset);
 
     const totalSections = sectionOffset.length;
@@ -33,7 +28,8 @@ window.onscroll = function (event) {
     }
 };
 
-window.addEventListener('scroll', function () {
+// Keep tracking the scroll position to trigger the parallax effect in specific point
+window.addEventListener('scroll', () => {
     var scrollPosition = window.scrollY;
     parallaxEffect(scrollPosition);
 });
@@ -45,7 +41,6 @@ window.addEventListener('scroll', function () {
 // Main functions
 function contentUpdate() {
     try {
-        console.log("Building plot");
         buildPlots();
     } catch (e) {
         console.warn(e);
@@ -58,7 +53,7 @@ function buildPlots() {
 	plasticPollution(generateColorScale());
 	threatenedSpecies();
 	marineSpeciesPopulation();
-    seafoodConsumption(2020);
+    yearIndicator();
 }
 
 
@@ -67,12 +62,14 @@ function buildPlots() {
 
 // Sub functions
 function sectionOffsetCheck() {
+    // Check each sections' offset from the top of the website
     for (var i = 0; i < 4; i++) {
         sectionOffset[i] = allSections[i].offsetTop + 0.5;
         // console.log(i + ": " + allSections[i].offsetTop);
     }
 }
 
+/* Below parallax effect were learnt from W3 school but added extra styling and functionality by myself https://www.w3schools.com/howto/howto_css_parallax.asp */
 const bottle = document.getElementById('parallax-bottle');
 const bottlePos = window.pageYOffset + bottle.getBoundingClientRect().top;
 
@@ -97,6 +94,7 @@ function parallaxEffect(scrollPosition) {
 }
 
 function parallaxTransform(scrollPosition, startPos, movSpeed, rotationSpeed, maxRange, obj, startX, startY, startRotation, startScale, x, y, rotation, scale, opacity) {
+    // Moving the parallax object when users scroll
     scrollPosition += 500;
     var distance = (scrollPosition - startPos) * movSpeed;
     if (scrollPosition < startPos) {
@@ -139,6 +137,10 @@ function parallaxDishScale(scrollPosition, obj, initialSize, finalSize) {
 
 // Button functions
 function sectionJump(section) {
+    // Check every section offset is updated
+    sectionOffsetCheck();
+
+    // Scroll to the clicked section afterwards
     window.scrollTo({
         top: sectionOffset[section] - 64,
         behavior: "smooth",
@@ -156,24 +158,41 @@ function yearIndicator() {
     seafoodConsumption(year);
 }
 
+// Allows users to click the play button to play the consumption changes animation
 var consumptionAnimating = false;
-function consumptionAnimation() {
+var stopAnimation = false;
+function consumptionAnimation(event) {
+    console.log(consumptionAnimating);
+    var animation;
     if (!consumptionAnimating) {
+        event.innerHTML = "&#9208";
         consumptionAnimating = true;
+        stopAnimation = false;
 
-        var value = 1990;
-        yearSelectore.value = value;
-        yearIndicator();
-    
-        // Using set interval to create animation https://www.w3schools.com/jsref/met_win_setinterval.asp
-        var animation = setInterval(function() {
-            value += 1
+        // Play the animation from the point users stop
+        var value = parseInt(yearSelectore.value);
+        if (value == 2020) {
+            value = 1990;
             yearSelectore.value = value;
             yearIndicator();
-            if (value >= 2020) {
+        }
+    
+        // Using set interval to create animation https://www.w3schools.com/jsref/met_win_setinterval.asp
+        animation = setInterval(function() {
+            if (value == 2020 || stopAnimation) {
+                console.log(value);
                 clearInterval(animation);
                 consumptionAnimating = false;
+                return;
             }
+            value += 1;
+            yearSelectore.value = value;
+            yearIndicator();
         }, 300);
+    } else {
+        // If users click the button again, stop the animation
+        event.innerHTML = "&#9205";
+        consumptionAnimating = false;
+        stopAnimation = true;
     }
 }
