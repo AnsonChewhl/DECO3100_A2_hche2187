@@ -617,7 +617,7 @@ function generateColorbar() {
 		colorbarContainer.appendChild(color);
 
 		var txt = document.createElement("p");
-		txt.innerText = numAbbr(mpwMax[mpwMax.length - 1 - i]) + " (tons)";
+		txt.innerText = numAbbr(mpwMax[mpwMax.length - 1 - i]);
 		color.appendChild(txt);
 	}
 }

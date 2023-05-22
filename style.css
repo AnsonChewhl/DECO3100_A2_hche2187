@@ -115,101 +115,24 @@ p {
 	font-weight: 400;
 	font-size: clamp(40px, 5vw, 64px);
 	text-transform: uppercase;
-	color: #EAEAEA;
 
 	align-items: center;
 	justify-content: center;
 
-	background: #1E1E1E;
+	background-color: #1C1C1C;
 	z-index: 10;
+}
+
+.session-break > p {
+	text-align: center;
+    color: #EAEAEA;
+	line-height: normal;
+	font-size: clamp(40px, 5vw, 64px);
 }
 
 .learn-more {
 	text-decoration: none;
 	color: #0084ff;
-}
-
-/* Slider function from https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_rangeslider */
-.slidecontainer {
-	position: relative;
-	width: 50%; /* Width of the outside container */
-	margin: 4vh auto 4vh;
-
-	text-align: center;
-}
-
-.slidecontainer > span {
-	position: absolute;
-    top: 81.5%;
-    left: -3%;
-	transform: translate(0, -50%);
-
-	font-size: 32px;
-	color: #fff;
-}
-
-/* The slider itself */
-.slider {
-	-webkit-appearance: none; /* Override default CSS styles */
-	appearance: none;
-
-	width: 100%; /* Full-width */
-	height: 10px; /* Specified height */
-
-	border-radius: 50px;
-	background: #002E47;
-
-	outline: none; /* Remove outline */
-	opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
-
-	-webkit-transition: .2s; /* 0.2 seconds transition on hover */
-	transition: opacity .2s;
-}
-
-/* Mouse-over effects */
-.slider:hover {
-	opacity: 1; /* Fully shown on mouse-over */
-}
-
-/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
-.slider::-webkit-slider-thumb {
-	-webkit-appearance: none; /* Override default look */
-	appearance: none;
-
-	width: 25px; /* Set a specific slider handle width */
-	height: 25px; /* Slider handle height */
-
-	border-radius: 50px;
-	background: #ffffff;
-
-	cursor: pointer; /* Cursor on hover */
-}
-
-.slider::-moz-range-thumb {
-	width: 25px; /* Set a specific slider handle width */
-	height: 25px; /* Slider handle height */
-
-	border-radius: 50px;
-	background: #ffffff;
-
-	cursor: pointer; /* Cursor on hover */
-}
-
-.slidecontainer > div {
-	position: relative;
-	padding-bottom: 1vh;
-
-	color: #fff;
-}
-
-@media screen and (max-width: 1440px) {
-	.slidecontainer {
-		width: 60%;
-	}
-
-	.slidecontainer > span {
-		left: -5%;
-	}
 }
 
 @media screen and (max-width: 1024px) {
@@ -227,6 +150,56 @@ p {
 		height: 550px;
 	}
 }
+
+@media screen and (max-width: 700px) {
+	.session-break > p {
+		width: 90%;
+		margin: auto;
+		font-size: 36px;
+	}
+}
+
+@media screen and (max-width: 600px) {
+	.plotly-container {
+		height: 450px;
+	}
+
+	.plot-header {
+		width: 90%;
+		font-size: 16px;
+	}
+
+	.main>p {
+		width: 95% !important;
+	}
+}
+
+@media screen and (max-width: 590px) {
+	h2 {
+		font-size: 32px;
+	}
+	
+	p {
+		font-size: 16px;
+	}
+}
+
+@media screen and (max-width: 425px) {
+	h2 {
+		font-size: 24px;
+	}
+	
+	p {
+		font-size: 14px;
+	}
+}
+
+@media screen and (max-width: 450px) {
+	.plotly-container {
+		height: 350px;
+	}
+}
+
 /* End of default properties */
 
 
@@ -342,75 +315,187 @@ p {
 
 /* Below navigation bar styling was copied from my previous DECO1016 task and adjusted to fit into the context of this website */
 #navbar {
-	width: 100%;
-	height: 64px;
-	position: fixed;
-	/* Fix it to the top of the screen */
-	background-color: #0E0E0E;
-	z-index: 100;
-	/* Avoid being covered by other elements */
+    width: 100%;
+    height: 64px;
+    position: fixed;
+    /* Fix it to the top of the screen */
+    background-color: #0E0E0E;
+    z-index: 100;
+    /* Avoid being covered by other elements */
 }
 
 .navbar-container {
-	display: flex;
-	justify-content: space-between;
-	height: 100%;
-	align-items: center;
-	padding: 0 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    height: 100%;
+    align-items: center;
+    padding: 0 1.5rem;
 }
 
 .navbar-container img#logo {
-	height: 40px;
+    height: 40px;
 }
 
 #navbar-menu ul {
-	list-style-type: none;
-	display: flex;
-	margin: 0;
-	padding: 0.4em 0.8em;
-	text-align: center;
-	overflow: hidden;
+    list-style-type: none;
+    display: flex;
+    margin: 0;
+    padding: 0.4em 0.8em;
+    text-align: center;
+    overflow: hidden;
 }
 
 #navbar-menu>ul>li {
-	display: inline;
-	line-height: 64px;
-	padding: 0 15px;
-	width: 100px;
+    display: inline;
+    line-height: 64px;
+    padding: 0 15px;
+    width: 100px;
 }
 
 #navbar-menu>ul>li>a {
-	position: relative;
-	display: block;
-	color: #EDEDED;
-	text-decoration: none;
-	font-size: 16px;
-	font-weight: 600;
+    position: relative;
+    display: block;
+    color: #EDEDED;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
 }
 
-/* Show a orange line under the current page to notify users which page they are at */
+/* Show an orange line under the current section to notify users which section they are at */
 #current-section::after {
-	position: absolute;
-	content: "";
-	height: 5px;
-	width: 100%;
-	left: 0;
-	bottom: 0;
-	background-color: #FF9900;
+    position: absolute;
+    content: "";
+    height: 5px;
+    width: 100%;
+    left: 0;
+    bottom: 0;
+    background-color: #FF9900;
 }
 
 #navbar-menu>ul>li>a:hover {
-	color: #FF9900;
+    color: #FF9900;
 }
 
 #navbar-menu>ul>li>a:hover::after {
-	position: absolute;
-	content: "";
-	height: 5px;
-	width: 100%;
-	left: 0;
-	bottom: 0;
-	background-color: #FF9900;
+    position: absolute;
+    content: "";
+    height: 5px;
+    width: 100%;
+    left: 0;
+    bottom: 0;
+    background-color: #FF9900;
+}
+
+#navbar-toggle {
+    display: none;
+    z-index: 100;
+}
+
+/* Responsive nav bar learnt from DECO1016 unit */
+@media screen and (max-width: 800px) {
+    #navbar-menu {
+        position: fixed;
+        width: 100%;
+        top: 64px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: none;
+    }
+
+    #navbar-menu ul {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        text-align: left;
+        left: 0;
+        right: 0;
+        width: 100%;
+        padding: 0.4em 0.8em 0;
+        background-color: #1C1C1C;
+    }
+
+    #navbar-menu>ul>li {
+        line-height: 64px;
+        width: 80%;
+    }
+
+    #navbar-menu>ul>li>a:hover {
+        border-bottom: 0;
+    }
+
+    .navbar-item>.hori-line {
+        display: block;
+        width: 100%;
+        height: 0.5px;
+        background-color: #EDEDED;
+    }
+
+    #navbar-menu>ul>li>a:hover::after {
+        height: 3px;
+        width: 100%;
+    }
+
+    #current-section::after {
+        height: 3px;
+        width: 100%;
+    }
+
+    #navbar-toggle.active+#navbar-menu {
+        background-color: #1C1C1C;
+        display: flex;
+    }
+
+    /* NAVBAR TOGGLE BUTTON */
+    /* Styles for the hamburger style menu button */
+    #navbar-toggle {
+        cursor: pointer;
+        border: none;
+        background-color: transparent;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    /* Reusable style for each menu bar */
+    .icon-bar {
+        display: block;
+        width: 25px;
+        height: 4px;
+        margin: 2px;
+        background-color: #454545;
+    }
+
+    /* Set the colour of the menu bars when hovered */
+    #navbar-toggle:hover .icon-bar {
+        background-color: #787878;
+    }
+
+    /* Set the icon bars for when the menu is active i.e. when the cross to close is showing */
+    #navbar-toggle.active .icon-bar:first-child,
+    #navbar-toggle.active .icon-bar:last-child {
+        position: absolute;
+        margin: 0;
+        width: 30px;
+    }
+
+    /* Rotate the top menu bar */
+    #navbar-toggle.active .icon-bar:first-child {
+        transform: rotate(45deg);
+    }
+
+    /* Hide the middle menu bar */
+    #navbar-toggle.active .icon-bar:nth-child(2) {
+        opacity: 0;
+    }
+
+    /* Rotate the bottom menu bar */
+    #navbar-toggle.active .icon-bar:last-child {
+        transform: rotate(-45deg);
+    }
 }
 
 /* End of navbar */
@@ -515,16 +600,12 @@ p {
 		width: 90%;
 	}
 
-	#brief>.main>h2 {
-		width: 85%;
-	}
-	
 	#brief>.main>p {
-		width: 80%;
+		width: 90%;
 	}
 	
 	#brief>.main>div {
-		width: 82.5%;
+		width: 87.5%;
 	}
 }
 
@@ -536,11 +617,30 @@ p {
 
 @media screen and (max-width: 1024px) {
 	#brief>.main>p {
-		width: 95%;
+		width: 95%  !important;;
 	}
 	
 	#brief>.main>div {
 		width: 90%;
+	}
+}
+
+@media screen and (max-width: 800px) {
+	#brief>.main>div {
+		top: 10%;
+	}
+}
+
+@media screen and (max-width: 700px) {
+	#landing h1 {
+		font-size: 64px;
+	}
+}
+
+@media screen and (max-width: 425px) {
+	#landing h1 {
+		top: 45%;
+		font-size: 48px;
 	}
 }
 /* End of home section */
@@ -552,7 +652,7 @@ p {
 
 #problem-cause {
 	margin: 0;
-	padding-bottom: 10vh;
+	padding-bottom: 30px;
 	position: relative;
 	background: linear-gradient(0deg, rgba(0, 0, 0, 0.95) 0%, #0A2745 100%);
 }
@@ -592,11 +692,16 @@ p {
 	font-size: 1.25vh;
 }
 
-@media screen and (max-width: 1024px) {
-	#problem-cause > div.main.centerTxt > p{
-		width: 85%;
-	}
+#problem-cause > p {
+	width: 100%;
+	margin: auto;
+	padding-top: 20px;
 
+	font-size: 14px;
+	text-align: center;
+}
+
+@media screen and (max-width: 1024px) {
 	#plot-colorbar {
 		width: 90%;
 	}
@@ -624,7 +729,7 @@ p {
 	/* Ordering the options inside the grid */
 	display: grid;
 	grid-template-columns: 25% 25% 25%;
-	row-gap: 3vh;
+	row-gap: 30px;
 	justify-content: space-evenly;
 	align-items: center;
 }
@@ -676,7 +781,7 @@ p {
 	min-height: 450px;
 	display: flex;
 	justify-content: center;
-	margin-bottom: 10vh;
+	margin-bottom: 50px;
 	gap: 5vw;
 }
 
@@ -744,6 +849,32 @@ p {
 	#threaten-species > .checkbox-container {
 		width: 90%;
 	}
+
+	.recommendation>div {
+		padding: 3vh 3vw;
+	}
+
+}
+
+@media screen and (max-width: 585px) {
+	#threaten-species > .plotly-container {
+		width: 100% !important;
+		height: 400px !important;
+	}
+
+	#threaten-species > .checkbox-container {
+		grid-template-columns: 1fr 1fr;
+		gap: 15px;
+	}
+
+	#population-trend>div>.plotly-container {
+		width: 90%;
+		height: 400px;
+	}
+
+	.recommendation>div>img {
+		height: auto;
+	}
 }
 
 /* End of situation section */
@@ -773,9 +904,98 @@ p {
 	border: 1px solid rgb(255, 255, 255);
 }
 
-#biodiversity-loss {
+/* Slider function from https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_rangeslider */
+.slidecontainer {
 	position: relative;
-	padding-bottom: 3vh;
+	width: 50%; /* Width of the outside container */
+	margin: 4vh auto 4vh;
+
+	text-align: center;
 }
 
+.slidecontainer > span {
+	position: absolute;
+    top: 81.5%;
+    left: -3%;
+	transform: translate(0, -50%);
+
+	font-size: 32px;
+	color: #fff;
+}
+
+/* The slider itself */
+.slider {
+	-webkit-appearance: none; /* Override default CSS styles */
+	appearance: none;
+
+	width: 95%;
+	height: 10px;
+
+	border-radius: 50px;
+	background: #002E47;
+
+	outline: none; /* Remove outline */
+	opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+
+	-webkit-transition: .2s; /* 0.2 seconds transition on hover */
+	transition: opacity .2s;
+}
+
+/* Mouse-over effects */
+.slider:hover {
+	opacity: 1; /* Fully shown on mouse-over */
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+.slider::-webkit-slider-thumb {
+	-webkit-appearance: none; /* Override default look */
+	appearance: none;
+
+	width: 25px; /* Set a specific slider handle width */
+	height: 25px; /* Slider handle height */
+
+	border-radius: 50px;
+	background: #ffffff;
+
+	cursor: pointer; /* Cursor on hover */
+}
+
+.slider::-moz-range-thumb {
+	width: 25px; /* Set a specific slider handle width */
+	height: 25px; /* Slider handle height */
+
+	border-radius: 50px;
+	background: #ffffff;
+
+	cursor: pointer; /* Cursor on hover */
+}
+
+.slidecontainer > div {
+	position: relative;
+	padding-bottom: 1vh;
+
+	color: #fff;
+}
+
+@media screen and (max-width: 1440px) {
+	.slidecontainer {
+		width: 60%;
+	}
+}
+
+@media screen and (max-width: 768px) {
+	.slidecontainer {
+		width: 75%;
+	}
+}
+
+@media screen and (max-width: 570px) {
+	.slidecontainer {
+		width: 85%;
+	}
+
+	.slider {
+		width: 85%;
+	}
+}
 /* End of impact section */

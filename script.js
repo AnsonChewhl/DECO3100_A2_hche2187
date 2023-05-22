@@ -2,7 +2,10 @@
 confirm(`Window width x height: ${window.innerWidth} x ${window.innerHeight}`);
 
 // Functions to call when the page finishes loading
-document.addEventListener('DOMContentLoaded', contentUpdate);
+document.addEventListener('DOMContentLoaded', () => {
+    navbarAnimation();
+    contentUpdate();
+});
 
 // Ensure the plots are correctly built even when the users have resized their screen
 window.addEventListener('resize', contentUpdate, true);
@@ -145,6 +148,35 @@ function sectionJump(section) {
         top: sectionOffset[section] - 64,
         behavior: "smooth",
     });
+}
+
+function navbarAnimation() {
+    // Nav-bar animation learnt from DECO1016
+    // Create a variable to reference the toggle <button>
+    var navbarToggle = navbar.querySelector("#navbar-toggle");
+
+    // Create a variable to reference the nav menu container <div>
+    var navbarMenu = document.querySelector("#navbar-menu");
+
+    // Create a variable to reference the <ul> list of nav links
+    var navbarLinksContainer = navbarMenu.querySelector(".navbar-links");
+
+    // Add or remove the 'active' class on the toggle <button> when clicked
+    navbarToggle.addEventListener("click", () => { navbarToggle.classList.toggle('active') });
+
+    // Remove the 'active' class on the menu container <div> when clicked 
+    // This will close the menu if the user clicks outside the nav link <ul>
+    navbarMenu.addEventListener("click", () => { navbarToggle.classList.remove('active') });
+
+    // Close the nav bar menu when users click any section tag
+    for (var i = 0; i < allNavLinks.length; i++) {
+        allNavLinks[i].addEventListener("click", () => { navbarToggle.classList.remove('active') });
+    }
+
+    navbarMenu.addEventListener("click", () => { navbarToggle.classList.remove('active') });
+
+    // Stop clicks on the navbar links from toggling the menu (for when it's not mobile)
+    navbarLinksContainer.addEventListener("click", (e) => e.stopPropagation());
 }
 
 // Update the value immediately when it is on drag https://www.quora.com/How-do-you-make-an-HTML-slider-value-update-when-its-being-dragged-by-a-mouse
