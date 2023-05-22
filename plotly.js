@@ -22,7 +22,7 @@ function plasticPollution(colorScale) {
 
 		mpw.forEach(element => {
 			var txt = "No data";
-			if (element > 0) txt = element + " (tons)";
+			if (element > 0) txt = element + " tons";
 			mpw_Txt.push(txt);
 		});
 
@@ -112,7 +112,7 @@ function threatenedSpecies() {
 			prediction.push(Math.round(lr.intercept + lr.slope * 2023));
 			prediction.push(Math.round(lr.intercept + lr.slope * 2024));
 
-			var trace = {
+			const trace = {
 				x: [year[i], year[i + 1], year[i + 2]],
 				y: [number[i], number[i + 1], number[i + 2]],
 				mode: 'lines',
@@ -134,7 +134,7 @@ function threatenedSpecies() {
 
 			// Function created by myself but Idea inspired by http://www.java2s.com/example/javascript/chart.js/line-chart-with-partial-dashed-line.html
 			// Create dash line for prediction https://plotly.com/javascript/line-charts/
-			var tracePrediction = {
+			const tracePrediction = {
 				x: [2023, 2024],
 				y: [prediction[0], prediction[1]],
 				mode: 'lines',
@@ -157,7 +157,7 @@ function threatenedSpecies() {
 
 			// Connect the orginal trace & prediction trace together
 			// Remove the duplicated hover info https://stackoverflow.com/questions/32319619/disable-hover-information-on-trace-plotly
-			var traceTransition = {
+			const traceTransition = {
 				x: [year[i + 2], 2023],
 				y: [number[i + 2], prediction[0]],
 				mode: 'lines',
@@ -173,7 +173,7 @@ function threatenedSpecies() {
 			chart_data.push(traceTransition);
 		}
 
-		var chart_layout = {
+		const chart_layout = {
 			title: {
 				font: { family: "Open Sans", size: 18, color: "#8E8E8E" },
 				text: 'Number of species threatened with extinction (Animals)',
@@ -221,7 +221,7 @@ function marineSpeciesPopulation() {
 		const number = unpack(data, 'Number');
 		for (let i = 0; i < number.length; i++) { number[i] = parseInt(number[i]); }
 
-		var chart_data = [{
+		const chart_data = [{
 			labels: trend,
 			values: number,
 
@@ -239,7 +239,7 @@ function marineSpeciesPopulation() {
 			type: 'pie'
 		}]
 
-		var chart_layout = {
+		const chart_layout = {
 			font: {
 				family: 'Open Sans',
 				color: '#EAEAEA'
@@ -422,64 +422,72 @@ function consumptionTrend(selectedCountry, reverse) {
 	if (reverse) plotDiv.style.left = x - width + "px";
 	else plotDiv.style.left = x + "px";
 	plotDiv.style.top = y + height + "px";
-	
-	Plotly.d3.csv("csv/seafood-consumption.csv", data => {
-		const plotDiv = document.getElementById('trend-plot');
 
-		const country = unpack(data, 'Entity');
-		const year = unpack(data, 'Year');
-		const consumption = unpack(data, 'Consumption');
+	const country = seafoodConsumtionTrend[0];
+	const year = seafoodConsumtionTrend[1];
+	const consumption = seafoodConsumtionTrend[2];
 
-		const yearLst = [];
-		const consumptionLst = [];
-		for (var i = 0; i < country.length; i++) {
-			if (country[i] == selectedCountry) {
-				yearLst.push(year[i]);
-				consumptionLst.push(consumption[i]);
-			}
+	let trendLst = [];
+	for (var i = 0; i < country.length; i++) {
+		if (country[i] == selectedCountry) {
+			trendLst.push([parseInt(year[i]), consumption[i]])
 		}
+	}
 
-		var chart_data = [{
-			x: yearLst,
-			y: consumptionLst,
-			mode: 'lines'
-		}];
+	// Sorting the trendLst by the year in descending order (from 1990 to 2020)
+	trendLst.sort((a, b) => {
+        if (a[0] > b[0]) return 1; 
+        else return -1;
+    });
 
-		var chart_layout = {
-			showlegend: false,
-			title: {
-				font: { family: "Open Sans", size: 12, color: "#8E8E8E" },
-				text: `${selectedCountry} seafood<br>consumption per capita (kg)`,
-				y: 0.9,
-			},
-			xaxis: {
-				type: 'category',
-				gridcolor: 'rgba(0,0,0,0)',
-				color: "#8E8E8E"
-			},
-			yaxis: {
-				zerolinecolor: '#454545',
-				gridcolor: 'rgba(0,0,0,0.3)',
-				color: "#8E8E8E"
-			},
-			margin: {
-				t: 60,
-				l: 40,
-				b: 60,
-				r: 20,
-				pad: 10
-			},
-			paper_bgcolor: '#212121',
-			plot_bgcolor: '#212121',
-			dragmode: false
-		};
+	const yearLst = [];
+	const consumptionLst = [];
+	trendLst.forEach(element => {
+		yearLst.push(element[0]);
+		consumptionLst.push(element[1]);
+	});
 
-		const config = {
-			displayModeBar: false
-		};
+	const chart_data = [{
+		x: yearLst,
+		y: consumptionLst,
+		mode: 'lines'
+	}];
 
-		Plotly.newPlot(plotDiv, chart_data, chart_layout, config);
-	})
+	const chart_layout = {
+		showlegend: false,
+		title: {
+			font: { family: "Open Sans", size: 12, color: "#8E8E8E" },
+			text: `${selectedCountry} seafood<br>consumption per capita (kg)`,
+			y: 0.9,
+		},
+		xaxis: {
+			type: 'category',
+			gridcolor: 'rgba(0,0,0,0)',
+			color: "#8E8E8E"
+		},
+		yaxis: {
+			constrain: "domain",
+			zerolinecolor: '#454545',
+			gridcolor: 'rgba(0,0,0,0.3)',
+			color: "#8E8E8E"
+		},
+		margin: {
+			t: 60,
+			l: 40,
+			b: 60,
+			r: 20,
+			pad: 10
+		},
+		paper_bgcolor: '#212121',
+		plot_bgcolor: '#212121',
+		dragmode: false
+	};
+
+	const config = {
+		displayModeBar: false
+	};
+
+	Plotly.newPlot(plotDiv, chart_data, chart_layout, config);
 }
 
 
@@ -691,13 +699,15 @@ function generateCheckbox(lst, colorGroup) {
 }
 
 var addedMissedData = false;
-let seafoodConsumptionData = [];
+let seafoodConsumptionData = []; // Main data to show through different year
+let seafoodConsumtionTrend = []; // Additional data to show the trend line when hover specific country
 function addMissedData(data) {
 	// Add back the countries that have data in any year but not all from 1990 to 2020
 	var country = unpack(data, 'Entity');
 	var location = unpack(data, 'Code');
 	var year = unpack(data, 'Year');
 	var consumption = unpack(data, 'Consumption');
+	var consumptionNull = unpack(data, 'Consumption');
 
 	var dataRow = country.length;
 	var preCountry = "";
@@ -717,6 +727,7 @@ function addMissedData(data) {
 					location.push(location[i-1]);
 					year.push(missedYear);
 					consumption.push(-1);
+					consumptionNull.push(null);
 				}
 			}
 
@@ -729,6 +740,7 @@ function addMissedData(data) {
 					location.push(location[i]);
 					year.push(missedYear);
 					consumption.push(-1);
+					consumptionNull.push(null);
 					missedYear += 1;
 				}
 			}
@@ -737,4 +749,5 @@ function addMissedData(data) {
 
 	addedMissedData = true;
 	seafoodConsumptionData = [country, location, year, consumption];
+	seafoodConsumtionTrend = [country, year, consumptionNull];
 }

@@ -132,18 +132,16 @@ p {
 /* Slider function from https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_rangeslider */
 .slidecontainer {
 	position: relative;
-	padding-top: 3vh;
-	padding-bottom: 5vh;
-	width: 60%; /* Width of the outside container */
-	margin: auto;
+	width: 50%; /* Width of the outside container */
+	margin: 4vh auto 4vh;
 
 	text-align: center;
 }
 
 .slidecontainer > span {
 	position: absolute;
-	top: 54.5%;
-	left: -3%;
+    top: 81.5%;
+    left: -3%;
 	transform: translate(0, -50%);
 
 	font-size: 32px;
@@ -204,9 +202,23 @@ p {
 	color: #fff;
 }
 
+@media screen and (max-width: 1440px) {
+	.slidecontainer {
+		width: 60%;
+	}
+
+	.slidecontainer > span {
+		left: -5%;
+	}
+}
+
 @media screen and (max-width: 1024px) {
 	.plotly-container {
 		height: 650px;
+	}
+
+	.main>p {
+		width: 90% !important;
 	}
 }
 
@@ -755,7 +767,7 @@ p {
 	pointer-events: none;
 
 	position: absolute;
-	height: 20vh;
+	height: 195px;
 	z-index: 3;
 
 	border: 1px solid rgb(255, 255, 255);

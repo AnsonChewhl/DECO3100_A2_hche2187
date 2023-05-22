@@ -162,7 +162,7 @@ function yearIndicator() {
 var consumptionAnimating = false;
 var stopAnimation = false;
 function consumptionAnimation(event) {
-    console.log(consumptionAnimating);
+    // console.log(consumptionAnimating);
     var animation;
     if (!consumptionAnimating) {
         event.innerHTML = "&#9208";
@@ -180,8 +180,9 @@ function consumptionAnimation(event) {
         // Using set interval to create animation https://www.w3schools.com/jsref/met_win_setinterval.asp
         animation = setInterval(function() {
             if (value == 2020 || stopAnimation) {
-                console.log(value);
+                // console.log(value);
                 clearInterval(animation);
+                event.innerHTML = "&#9205";
                 consumptionAnimating = false;
                 return;
             }
