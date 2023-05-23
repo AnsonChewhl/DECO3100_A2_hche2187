@@ -86,6 +86,51 @@ p {
 	height: 100%;
 }
 
+/* Stylising the colorbar that was created from scratch */
+.plot-colorbar {
+	height: 2vh;
+	width: 70%;
+	padding-top: 3vh;
+	margin: auto;
+	
+	display: flex;
+	align-items: stretch;
+	z-index: 99;
+}
+
+.plot-colorbar > span {
+	/* Equally distribute within the container https://stackoverflow.com/questions/29467660/how-to-stretch-children-to-fill-cross-axis */
+	display: block;
+	height: 1.5vh;
+	flex: 1;
+
+	border: 0.5px solid rgb(255, 255, 255);
+}
+
+/* Added a border to the colorbar to increase the visibility of what user is hovering */
+.plot-colorbar > span:hover {
+	border: 3px solid rgb(195, 195, 195);
+}
+
+.chart-selected {
+	border: 3px solid rgb(255, 255, 255) !important;
+}
+
+.plot-colorbar > span > p {
+	width: 100%;
+	text-align: center;
+	font-size: 1.25vh;
+}
+
+.colorbar-unit {
+	width: 100%;
+	margin: auto;
+	padding-top: 20px;
+
+	font-size: 14px;
+	text-align: center;
+}
+
 .section-bg {
 	position: absolute;
 	height: 100%;
@@ -142,6 +187,10 @@ p {
 
 	.main>p {
 		width: 90% !important;
+	}
+
+	.plot-colorbar {
+		width: 90%;
 	}
 }
 
@@ -661,51 +710,6 @@ p {
 	padding-top: 7vh;
 }
 
-/* Stylising the colorbar that was created from scratch */
-#plot-colorbar {
-	height: 2vh;
-	width: 70%;
-	padding-top: 3vh;
-	margin: auto;
-	
-	display: flex;
-	align-items: stretch;
-}
-
-#plot-colorbar > span {
-	/* Equally distribute within the container https://stackoverflow.com/questions/29467660/how-to-stretch-children-to-fill-cross-axis */
-	display: block;
-	height: 1.5vh;
-	flex: 1;
-
-	border: 0.5px solid rgb(255, 255, 255);
-}
-
-/* Added a border to the colorbar to increase the visibility of what user is hovering */
-#plot-colorbar > span:hover {
-	border: 3px solid rgb(255, 255, 255);
-}
-
-#plot-colorbar > span > p {
-	width: 100%;
-	text-align: center;
-	font-size: 1.25vh;
-}
-
-#problem-cause > p {
-	width: 100%;
-	margin: auto;
-	padding-top: 20px;
-
-	font-size: 14px;
-	text-align: center;
-}
-
-@media screen and (max-width: 1024px) {
-	#plot-colorbar {
-		width: 90%;
-	}
-}
 /* End of background section */
 
 
@@ -765,7 +769,7 @@ p {
 	padding: 0;
 }
 
-#population-trend>div>.main>p {
+#population-trend>div>.main>h2, #population-trend>div>.main>p{
 	width: 100%;
 }
 
@@ -818,6 +822,10 @@ p {
 
 	#population-trend>div>.main {
 		padding: 5.5vh 0 1vh 10%;
+	}
+
+	#population-trend>div>.main>h2 {
+		width: 90%;
 	}
 
 	#population-trend>div>.main>p {

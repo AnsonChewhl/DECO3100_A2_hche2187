@@ -101,10 +101,9 @@
 				</div>
 
 				<!-- To add extra hovering function and increase the usability, the colorbar was created from scratch -->
-				<div id="plot-colorbar">
-				</div>
+				<div class="plot-colorbar"></div>
 
-				<p>(<strong>tons</strong> as the unit)</p>
+				<p class="colorbar-unit">(<strong>tons</strong> as the unit)</p>
 			</section>
 
 			<!-- As an online data journalism, it is important to answer the "So, what" question that readers may have https://www.tandfonline.com/doi/full/10.1080/17439884.2013.848454  -->
@@ -125,9 +124,10 @@
 			<section id="threaten-species">
 				<div class="main">
 					<h2>Endangered aquatic species are threatened with extinction</h2>
-					<p>There are aquatic species’ (animals that live in water) population decreasing at an alarming rate and being considered endangered (facing a very high risk of extinction). “Fishes” is the only animal group that has over 3000 endangered animals. Numerous causes devastate their population, such as climate change and water pollution. IUCN revealed that Plastic pollution is threatening their size as it degrades the water quality.</p>
+					<p>There are aquatic species’ (animals that live in water) populations decreasing at an alarming rate and being considered endangered (facing a very high risk of extinction). “Fishes” is the only animal group that has over 3000 endangered animals. Numerous causes devastate their population, such as climate change and water pollution. IUCN revealed that Plastic pollution is threatening their size as it degrades the water quality. <br> <br> The data from 2012 to 2021 was collected and used linear regression to predict the potential number of threatened species in the future. The predictions are mostly lining up with the actual value in 2022. However, most of them have underestimated the actual value in 2022. Thus, we should consider this, especially since the amount of threatened species has a high risk of rising.</p>
 				</div>
 				<div class="plotly-container" style="width: 80%; height: 600px;">
+					<h3 class="plot-header">Number of species threatened with extinction (Animals)</h3>
 					<div class="plot" id="threaten-species-plot"></div>
 				</div>
 				<!-- Users can interact with the plot and deselect any animal groups for better comparison -->
@@ -140,17 +140,14 @@
 				<div>
 					<div class="main">
 						<h2>Most of the threatened aquatic species' population is decreasing</h2>
-						<p>Due to plastic waste being emitted to the ocean, the loggerhead sea turtles (the world's largest hard-shelled turtle) are listed as endangered. Additionally, according to Condor Ferries, over 1 million seabirds and 100,000 marine species die from plastic pollution every year. Ocean Conservancy added that plastic has been found in more than 60% of all seabirds and in 100% of sea turtles species that mistake plastic for food. <br> <br> Besides that, there are a number of whales threatened by plastic pollution, such as blue whales, the largest animal known to ever exist. How are they affected? ABC news reported that a sperm whale was washed up on a beach in Spain and died due to nearly 30 kg of trash, including plastic, that blocked its digestive system.</p>
+						<p>Due to plastic waste being emitted to the ocean, the loggerhead sea turtles (the world's largest hard-shelled turtle) are listed as endangered. Additionally, according to Condor Ferries, over 1 million seabirds and 100,000 marine species die from plastic pollution every year. Ocean Conservancy added that plastic has been found in more than 60% of all seabirds and in 100% of sea turtles species that mistake plastic for food.</p>
 					</div>
 					<div class="plotly-container">
 						<h3 class="plot-header">Marine species threatened by waste pollution (Population trend)</h3>
 						<div class="plot" id="population-trend-plot"></div>
 					</div>
 					<div class="main">
-						<p>Besides that, there are a number of whales threatened by plastic pollution, such as blue
-							whales, the largest animal known to ever exist. How are they affected? ABC news (2018)
-							reported that a sperm whale was washed up on a beach in Spain and died due to nearly 30 kg
-							of trash, including plastic, that blocked its digestive system.</p>
+						<p>Besides that, there are a number of whales threatened by plastic pollution, such as blue whales, the largest animal known to ever exist. How are they affected? ABC news reported that a sperm whale was washed up on a beach in Spain and died due to nearly 30 kg of trash, including plastic, that blocked its digestive system.</p>
 					</div>
 				</div>
 			</section>
@@ -215,6 +212,10 @@
 					<div class="plot" id="seafood-demand-plot"></div>
 					<div id="trend-plot"></div>
 				</div>
+
+				<!-- To add extra hovering function and increase the usability, the colorbar was created from scratch -->
+				<div class="plot-colorbar" style="width: 60%;"></div>
+				<p class="colorbar-unit">(<strong>kg</strong> as the unit)</p>
 
 				<!-- Allowing the users to see the changes through animation -->
 				<div class="slidecontainer">

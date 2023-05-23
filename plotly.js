@@ -6,16 +6,17 @@ const unpack = (data, key) => data.map(row => row[key]);
 
 
 /* Main functions */
-function plasticPollution(colorScale) {
+function plasticPollution() {
 	Plotly.d3.csv("csv/plastic-pollution.csv", data => {
 		const plotDiv = document.getElementById('plastic-pollution-plot');
+		plotDiv.addEventListener("click", () => {colorBarSelected(chart1_colorbar, 1, null);});
 
 		const country = unpack(data, 'Entity');
 		const location = unpack(data, 'Code');
 		const mpw = unpack(data, 'MPW');
 
 		// As the amount of MPW of Philippines is too high and skews the chart, I scaled the color bar for better visualisation
-		var mpw_Scaled = scaleColorbar(mpw);
+		var mpw_Scaled = scaleColorbar(mpw, mpwDivision);
 
 		// Create custom hover text to fix the null data text
 		var mpw_Txt = [];
@@ -34,7 +35,7 @@ function plasticPollution(colorScale) {
 			z: mpw_Scaled,
 
 			// Making no data object different color, concept from https://community.plotly.com/t/visually-marking-numpys-nan-as-grey/17007/2
-			colorscale: colorScale,
+			colorscale: chart1_colorScale,
 			
 			marker: {
 				line: {
@@ -98,31 +99,59 @@ function threatenedSpecies() {
 			skipLst.push(index);
 		}
 
-		for (var i = 0; i < group.length; i += 3) {
+		var totalYear = 11;
+		for (var i = 0; i < group.length; i += totalYear) {
 			// Check any animal group is deselected
-			if (skipLst != null && skipLst.includes(i / 3)) continue;
+			if (skipLst != null && skipLst.includes(i / totalYear)) continue;
 
-			var known_x = [parseInt(year[i]), parseInt(year[i + 1]), parseInt(year[i + 2])];
-			var known_y = [parseInt(number[i]), parseInt(number[i + 1]), parseInt(number[i + 2])];
-			// console.log(group[i], known_x, known_y);
+			// For calculating the predicition
+			const known_x = [];
+			const known_y = [];
+
+			// To display on the graph
+			const show_x = [];
+			const show_y = [];
+
+			for (var j = 0; j < totalYear - 1; j++) {
+				var yr = parseInt(year[i+j]);
+				var num = parseInt(number[i+j])
+				known_x.push(yr);
+				known_y.push(num);
+				
+				if (yr >= 2016) {
+					show_x.push(yr);
+					show_y.push(num);
+				}
+			}
 
 			var lr = linearRegression(known_y, known_x);
-			// console.log(lr.intercept, lr.slope);
-			var prediction = []
-			prediction.push(Math.round(lr.intercept + lr.slope * 2023));
-			prediction.push(Math.round(lr.intercept + lr.slope * 2024));
+			
+			var predictionYear = [2022, 2023, 2024, 2025, 2026];
+			var prediction = [];
+			for (var j = 0; j < predictionYear.length; j++) {
+				prediction.push(Math.round(lr.intercept + lr.slope * predictionYear[j]));
+			}
+
+			// Including 2022 for display but not for calculating the linear regression to avoid bias
+			show_x.push(parseInt(year[i+totalYear-1]));
+			show_y.push(parseInt(number[i+totalYear-1]));
+
+			const hoverText = [];
+			for (var j = 0; j < totalYear; j++) {
+				hoverText.push(group[i]);
+			}
 
 			const trace = {
-				x: [year[i], year[i + 1], year[i + 2]],
-				y: [number[i], number[i + 1], number[i + 2]],
+				x: show_x,
+				y: show_y,
 				mode: 'lines',
 				name: group[i],
 				line: {
-					color: colorGroup[i / 3]
+					color: colorGroup[i / totalYear]
 				},
 				
-				text: [group[i], group[i], group[i]],
-				hovertemplate: ' %{text} threaten species: <b>%{y}</b><extra></extra> ',
+				text: hoverText,
+				hovertemplate: ' %{text} threaten species in %{x} (actual): <b>%{y}</b><extra></extra> ',
 
 				// Change the text color to improve readability https://community.plotly.com/t/change-hover-text-color/28039/8
 				hoverlabel: {
@@ -135,17 +164,17 @@ function threatenedSpecies() {
 			// Function created by myself but Idea inspired by http://www.java2s.com/example/javascript/chart.js/line-chart-with-partial-dashed-line.html
 			// Create dash line for prediction https://plotly.com/javascript/line-charts/
 			const tracePrediction = {
-				x: [2023, 2024],
-				y: [prediction[0], prediction[1]],
+				x: predictionYear,
+				y: prediction,
 				mode: 'lines',
 				name: group[i] + " (Prediction)",
 				line: {
 					dash: 'dot',
-					color: colorGroup[i / 3]
+					color: colorGroup[i / totalYear]
 				},
 
-				text: [group[i], group[i], group[i]],
-				hovertemplate: ' %{text} threaten species <i>(prediction)</i>: <b>%{y}</b><extra></extra> ',
+				text: hoverText,
+				hovertemplate: ' %{text} threaten species in %{x} <i>(prediction)</i>: <b>%{y}</b><extra></extra> ',
 
 				// Change the text color to improve readability https://community.plotly.com/t/change-hover-text-color/28039/8
 				hoverlabel: {
@@ -158,12 +187,12 @@ function threatenedSpecies() {
 			// Connect the orginal trace & prediction trace together
 			// Remove the duplicated hover info https://stackoverflow.com/questions/32319619/disable-hover-information-on-trace-plotly
 			const traceTransition = {
-				x: [year[i + 2], 2023],
-				y: [number[i + 2], prediction[0]],
+				x: [year[i + known_x.length - 1], predictionYear[0]],
+				y: [number[i + known_y.length - 1], prediction[0]],
 				mode: 'lines',
 				line: {
 					dash: 'dot',
-					color: colorGroup[i / 3]
+					color: colorGroup[i / totalYear]
 				},
 				hoverinfo: 'skip'
 			};
@@ -174,10 +203,6 @@ function threatenedSpecies() {
 		}
 
 		const chart_layout = {
-			title: {
-				font: { family: "Open Sans", size: 18, color: "#8E8E8E" },
-				text: 'Number of species threatened with extinction (Animals)',
-			},
 			font: {
 				family: 'Open Sans',
 				color: '#EAEAEA'
@@ -188,7 +213,7 @@ function threatenedSpecies() {
 				gridcolor: '#454545',
 			},
 			yaxis: {
-				range: [0, 4500],
+				range: [0, 4000],
 				autorange: false,
 				zerolinecolor: '#454545',
 				gridcolor: '#454545',
@@ -207,7 +232,7 @@ function threatenedSpecies() {
 
 		// Create the checkbox to allow users deselect any animal groups
 		if (!checkboxGenerated) {
-			generateCheckbox(group, colorGroup)
+			generateCheckbox(group, totalYear, colorGroup);
 		}
 	})
 }
@@ -274,6 +299,7 @@ function marineSpeciesPopulation() {
 function seafoodConsumption(selectedYear) {
 	Plotly.d3.csv("csv/seafood-consumption.csv", data => {
 		const plotDiv = document.getElementById('seafood-demand-plot');
+		plotDiv.addEventListener("click", () => {colorBarSelected(chart2_colorbar, 2, null);});
 
 		// Check any missed data from all countries (1990-2020)
 		if (!addedMissedData) addMissedData(data);
@@ -293,26 +319,22 @@ function seafoodConsumption(selectedYear) {
 			consumptionLst.push(consumption[i]);
 		}
 
+		// Fix the scale of the consumptionLst to avoid scale changes
+		var consumptionLst_Scaled = scaleColorbar(consumptionLst, seafoodDivision);
+
 		// Create custom hover text to fix the null data text
 		var consumption_Txt = [];
 
-		// Fix the scale of the consumptionLst to avoid scale changes
-		var consumptionLst_Scaled = []
-
 		consumptionLst.forEach(element => {
 			var txt = "No data";
-			var scaled_Value = element;
-
 			// Round to two decimal places https://stackoverflow.com/questions/11832914/how-to-round-to-at-most-2-decimal-places-if-necessary
 			if (element > 0) txt = Math.round(element * 100) / 100 + " (kg)";
-			if (element > 80) scaled_Value = 89;
-
-			consumptionLst_Scaled.push(scaled_Value);
 			consumption_Txt.push(txt);
 		});
 
-		// Fix the min value of the consumptionLst
+		// Fix the min and max value of the consumptionLst
 		consumptionLst_Scaled.push(-1);
+		consumptionLst_Scaled.push(80);
 
 		const hover_Text = countryLst.map((name, index) => ` Country: ${name}<br> Consumption per capita in ${selectedYear}: <b>${consumption_Txt[index]}</b> `);
 
@@ -321,24 +343,18 @@ function seafoodConsumption(selectedYear) {
 			locations: locationLst,
 			z: consumptionLst_Scaled,
 
-			colorscale: [
-				[0, 'rgb(30, 30, 30)'],
-				[0.001, 'rgb(30, 30, 30)'],
-				[0.001, '#ccccff'],
-				[0.2, '#0099cc'],
-				[0.8, '#24478f'],
-				[1, '#142952']
-			],
-			colorbar: {
-				autotic: false,
-				ticksuffix: ' (kg)'
-			},
+			// Making no data object different color, concept from https://community.plotly.com/t/visually-marking-numpys-nan-as-grey/17007/2
+			colorscale: chart2_colorScale,
+			
 			marker: {
 				line: {
 					color: 'rgb(255,255,255)',
 					width: 0.3
 				}
 			},
+			
+			// Hide the colorbar and create a new one by myself
+			showscale: false, 
 			text: hover_Text,
 			hovertemplate: '%{text}<br><extra></extra>',
 			hoverlabel: {
@@ -492,196 +508,159 @@ function consumptionTrend(selectedCountry, reverse) {
 
 
 
-/* Sub functions */
-const mpwMax = [300000, 100000, 70000, 50000, 30000, 20000, 10000, 5000, 3000, 1000, 500, 1];
-const colorbarContainer = document.getElementById("plot-colorbar");
-const mpwColorbar = ['#107400', '#0CF23A', '#7FB057', '#98F97D', '#E2C768', '#FCDD2B', '#ED993D', '#FF8500', '#D74848', '#FA1717', '#AC4AB5', '#740090'];
-function scaleColorbar(mpw) {
-	// A function to allocate color for the country based on its mpw
-	var mpwLst = [];
-	mpw.forEach(element => {
-		var new_Mpw = -1;
 
-		for (var i = 0; i < mpwMax.length; i++) {
-			if (element >= mpwMax[i]) {
-				new_Mpw = mpwMax[i];
+
+/* Sub functions */
+const mpwDivision = [0, 500, 1000, 3000, 5000, 10000, 20000, 30000, 50000, 70000, 100000, 300000];
+const mpwColorbar = ['#a1d6ff', '#7FB057', '#20a12b', '#107400', '#E2C768', '#ED993D', '#FF8500', '#FCDD2B', '#D74848', '#FA1717', '#b5006a', '#740090'];
+const chart1_colorbar = document.querySelector("#problem-cause > .plot-colorbar");
+const chart1_colorbarLst = document.querySelectorAll("#problem-cause > .plot-colorbar > span");
+let chart1_colorScale = [];
+
+const seafoodDivision = [0, 5, 10, 20, 30, 40, 50, 60, 80];
+const seafoodColorbar = ['#f5ece4','#e8ee90','#ddc798','#90ee90','#42bff5','#0099cc','#1e90ff','#24478f','#142952'];
+const chart2_colorbar = document.querySelector("#seafood-demand > .plot-colorbar");
+const chart2_colorbarLst = document.querySelectorAll("#seafood-demand > .plot-colorbar > span");
+let chart2_colorScale = [];
+
+function scaleColorbar(lst, division) {
+	// A function to rescale the divison of the countries
+	var newLst = [];
+	lst.forEach(element => {
+		var scaledElement = -1;
+
+		for (var i = 0; i < division.length; i++) {
+			var index = division.length - 1 - i;
+			if (element >= division[index]) {
+				if (index == 0) scaledElement = 1;
+				else scaledElement = division[index];
 				break;
 			}
 		}
 
-		mpwLst.push(new_Mpw);
+		newLst.push(scaledElement);
 	});
 
-	return (mpwLst);
+	return (newLst);
 }
 
-function generateColorScale(selected) {
+function colorBarHover(colorBarContainer) {
+	// Only color the countries that match user hover selection from the colorbar
+	var colorBarLst = colorBarContainer.childNodes;
+
+	for (var i = 0; i < colorBarLst.length; i++) {
+		// Check if matches user hover element https://stackoverflow.com/questions/14795099/pure-javascript-to-check-if-something-has-hover-without-setting-on-mouseover-ou
+		if (colorBarLst[i].matches(':hover')) {
+			// Return the index of the hovered element
+			return i;
+		}
+	}
+}
+
+var chart1_selectedLst = [];
+var chart2_selectedLst = [];
+function colorBarSelected(colorBarContainer, chartNum, selected) {
+	var colorBarLst = colorBarContainer.childNodes;
+
+	var lst = [];
+	if (chartNum == 1) lst = chart1_selectedLst;
+	else lst = chart2_selectedLst;
+
+	// When the user clicks the ocean
+	if (selected == null && lst.length > 0) {
+		colorBarLst.forEach(element => {element.removeAttribute("class");});
+		if (chartNum == 1) chart1_selectedLst = [];
+		else chart2_selectedLst = [];
+	} else {
+		for (var i = 0; i < colorBarLst.length; i++) {	
+			if (selected == colorBarLst[i]) {
+				if (selected.getAttribute("class") == "chart-selected") {
+					// Remove specific element from array https://stackoverflow.com/questions/5767325/how-can-i-remove-a-specific-item-from-an-array-in-javascript
+					if (chartNum == 1) chart1_selectedLst.splice(chart1_selectedLst.indexOf(i), 1);
+					else chart2_selectedLst.splice(chart2_selectedLst.indexOf(i), 1);
+					selected.removeAttribute("class");
+				} else {
+					if (chartNum == 1) chart1_selectedLst.push(i);
+					else chart2_selectedLst.push(i);
+					selected.setAttribute("class", "chart-selected");
+				}
+				break;
+			}
+		}
+	}
+
+	setColorScale();
+	plasticPollution();
+	yearIndicator();
+}
+
+function setColorScale() {
+	chart1_colorScale = generateColorScale(mpwDivision, mpwColorbar, null, chart1_selectedLst);
+    chart2_colorScale = generateColorScale(seafoodDivision, seafoodColorbar, null, chart2_selectedLst);
+}
+
+function generateColorScale(division, colorLst, hover, selectedLst) {
 	// By testing different colorscale setting, I found that plotly colorscale are scaled based on the (provided number : max number) => which means 100:300000 = 0.000333
 	// Thus, I can simply use the array of [0.0000034, #fff] to set the colorscale of country that has 1 tons mpw
 	var colorScale = [];
 
 	// To make the colorscale array valid, I have to start from small number (0.000000001) to big number (1)
-	var lastPercent = 0.00000001;
+	var lastPercent = 0.000000000001;
 
 	// Setting a dark grey color for countries that have no data (-1)
 	// The starting position of the color: 0
 	colorScale.push([0, 'rgb(30, 30, 30)']);
+
 	// The ending position of the color: lastPercent
 	colorScale.push([lastPercent, 'rgb(30, 30, 30)']);
 
-	for (var i = mpwMax.length - 1; i >= 0; i--) {
-		var index = mpwMax.length - 1 - i;
+	for (var i = 0; i < division.length; i++) {
 		var colorCode = 'rgb(30, 30, 30)';
 
-		if (selected == null || index == selected) colorCode = mpwColorbar[index];
+		// If the no group has been hovered / selected, color all countries with their associated group
+		// Or if user has hovered / selected any group, only color the countries within that group
+		if ((hover == null && selectedLst.length == 0) || i == hover) colorCode = colorLst[i];
+		else if (selectedLst.includes(i)) colorCode = colorLst[i];
 
-		var percent = mpwMax[i] / mpwMax[0];
+		// Normalising the number to get the percentage
+		var percent = norm(division[i], -1, division[division.length - 1]);
 
 		// To ensure all the countries that have very little MPW being included
-		if (i == (mpwMax.length - 1)) { percent *= 2; }
+		// When the color scale is too samll, plotly can't compile it correctly https://community.plotly.com/t/colorscale-inaccurate/5702
+		if (i == 0) { percent = 1 / division[division.length - 1] * 2; }
 
-		// A function to ensure that the percent is actually greater than the actual
+		// A function to ensure that the percent is greater than the actual
 		percent = addDecimal(percent);
 
 		colorScale.push([lastPercent, colorCode]);
 		colorScale.push([percent, colorCode]);
+
 		lastPercent = percent;
 	}
 
-	// console.log(colorScale);
 	return colorScale;
 }
 
-function addDecimal(num) {
-	// A function to ensure that the percent is actually greater than the actual (e.g. 0.34 -> 0.35)
-	if (num >= 1) return num;
 
-	const decimal = num.toString().split('.')[1] || '';
-	const decimalPlaces = decimal.length;
 
-	// Formula created by myself but Concept inspired by https://www.tutorialspoint.com/How-can-I-round-a-number-to-1-decimal-place-in-JavaScript
-	// Avoid no digit after the first digit
-	const numStr = num.toFixed(decimalPlaces + 1).toString().split(".")[1].split("");
 
-	var newNum = [0, "."];
-	for (var i = 0; i < numStr.length; i++) {
-		// First digit find
-		if (numStr[i] != "0") {
-			// Check whether it will adds up more than 9
-			if (numStr[i + 1] == 9) {
-				if (numStr[i] == 9) {
-					newNum[i - 1] = 1;
-					break
-				} else {
-					newNum.push(parseInt(numStr[i]) + 1);
-					break
-				}
-			}
-
-			newNum.push(parseInt(numStr[i]));
-			newNum.push(parseInt(numStr[i + 1]) + 1);
-			break;
-		} else {
-			newNum.push(0);
-		}
-	}
-
-	return newNum.join("");
-}
-
-function numAbbr(num) {
-	// A function to make the display into abbr form (e.g. 10000 -> 10k)
-	// Formula created by myself but inspired by https://stackoverflow.com/questions/2685911/is-there-a-way-to-round-numbers-into-a-reader-friendly-format-e-g-1-1k
-	var numSplit = num.toString().split('');
-	var newNum = [];
-
-	if (numSplit.length > 3 && numSplit.length < 7) {
-		for (var i = 0; i < numSplit.length - 3; i++) newNum.push(numSplit[i]);
-		return newNum.join("") + "k";
-	} else {
-		return num;
-	}
-}
-
-generateColorbar();
-function generateColorbar() {
-	for (var i = 0; i < mpwColorbar.length; i++) {
-		var num = i;
-		var color = document.createElement("span");
-		color.style.backgroundColor = mpwColorbar[i];
-
-		// Hover effect to focus inspired by this website https://ourworldindata.org/plastic-pollution#
-		// Onmouseover & onmouseout https://www.w3schools.com/jsref/event_onmouseover.asp
-		color.onmouseover = highlightPlot;
-		color.onmouseout = highlightPlot;
-		colorbarContainer.appendChild(color);
-
-		var txt = document.createElement("p");
-		txt.innerText = numAbbr(mpwMax[mpwMax.length - 1 - i]);
-		color.appendChild(txt);
-	}
-}
-
-function highlightPlot() {
-	// Only color the countries that match user hover selection from the colorbar
-	const colorBarLst = document.querySelectorAll("#plot-colorbar > span");
-	for (var i = 0; i < colorBarLst.length; i++) {
-		// Check if matches user hover element https://stackoverflow.com/questions/14795099/pure-javascript-to-check-if-something-has-hover-without-setting-on-mouseover-ou
-		if (colorBarLst[i].matches(':hover')) {
-			// Generate a new color scale that only colors the countries that match the color
-			plasticPollution(generateColorScale(i));
-			return;
-		}
-	}
-
-	// If user mouse no longer hover any color bar, reset the graph
-	plasticPollution(generateColorScale());
-}
-
-// Linear regression function that predicts the amount of threaten species 
-// Code was taken from https://stackoverflow.com/questions/6195335/linear-regression-in-javascript
-// Concept was learn from https://oliverjumpertz.com/simple-linear-regression-theory-math-and-implementation-in-javascript/
-function linearRegression(y, x) {
-	var lr = {};
-	var n = y.length;
-	var sum_x = 0;
-	var sum_y = 0;
-	var sum_xy = 0;
-	var sum_xx = 0;
-	var sum_yy = 0;
-
-	for (var i = 0; i < y.length; i++) {
-
-		sum_x += x[i];
-		sum_y += y[i];
-		sum_xy += (x[i] * y[i]);
-		sum_xx += (x[i] * x[i]);
-		sum_yy += (y[i] * y[i]);
-	}
-
-	lr['slope'] = (n * sum_xy - sum_x * sum_y) / (n * sum_xx - sum_x * sum_x);
-	lr['intercept'] = (sum_y - lr.slope * sum_x) / n;
-	lr['r2'] = Math.pow((n * sum_xy - sum_x * sum_y) / Math.sqrt((n * sum_xx - sum_x * sum_x) * (n * sum_yy - sum_y * sum_y)), 2);
-
-	return lr;
-}
 
 var checkboxGenerated = false;
-function generateCheckbox(lst, colorGroup) {
+function generateCheckbox(lst, num, colorGroup) {
 	// Generate checkboxs for each animal group and color them with their color on the plot
 	const container = document.querySelector(".checkbox-container");
-	for (var i = 0; i < lst.length; i += 3) {
+	for (var i = 0; i < lst.length; i += num) {
 		let parent = document.createElement("div");
 
 		let checkbox = document.createElement("div");
 		checkbox.setAttribute("class", "checkbox");
-		checkbox.style.color = colorGroup[i / 3];
+		checkbox.style.color = colorGroup[i / num];
 		parent.appendChild(checkbox);
 
 		let input = document.createElement("input");
 		input.setAttribute("type", "checkbox");
 		input.setAttribute("name", lst[i]);
-		input.setAttribute("value", i / 3);
+		input.setAttribute("value", i / num);
 		input.checked = true;
 		checkbox.appendChild(input);
 
@@ -697,6 +676,11 @@ function generateCheckbox(lst, colorGroup) {
 	// Stop generating new checkbox when building the plot
 	checkboxGenerated = true;
 }
+
+
+
+
+
 
 var addedMissedData = false;
 let seafoodConsumptionData = []; // Main data to show through different year
