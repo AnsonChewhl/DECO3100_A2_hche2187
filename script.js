@@ -1,5 +1,5 @@
 // Check the users window width and height for testing purpose
-// confirm(`Window width x height: ${window.innerWidth} x ${window.innerHeight}`);
+confirm(`Window width x height: ${window.innerWidth} x ${window.innerHeight}`);
 
 // Functions to call when the page finishes loading
 document.addEventListener('DOMContentLoaded', () => {
