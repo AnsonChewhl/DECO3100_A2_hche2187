@@ -27,7 +27,7 @@ function plasticPollution() {
 			mpw_Txt.push(txt);
 		});
 
-		const hover_Text = country.map((name, index) => ` Country: ${name} <br> MPW released into oceans: <b>${mpw_Txt[index]}</b> `);
+		const hover_Text = country.map((name, index) => ` Country: ${name}<br> MPW released into oceans: <b>${mpw_Txt[index]}</b> `);
 
 		const chart_data = [{
 			type: 'choropleth',
@@ -75,7 +75,12 @@ function plasticPollution() {
 			dragmode: false 
 		};
 
-		Plotly.newPlot(plotDiv, chart_data, chart_layout);
+		const config = {
+			// Only display the chart and hide other display elements
+		   displayModeBar: false
+		};
+
+		Plotly.newPlot(plotDiv, chart_data, chart_layout, config);
 	});
 }
 
@@ -94,12 +99,11 @@ function threatenedSpecies() {
 
 		// Check any animal group is deselected
 		var skipLst = [];
-		for (var index = 0; index < checkbox.length; index++) {
-			if (checkbox[index].checked) continue
-			skipLst.push(index);
-		}
+		checkbox.forEach(element => {
+			if (!element.checked) skipLst.push(Number(element.getAttribute("value")));
+		});
 
-		var totalYear = 11;
+		var totalYear = 7;
 		for (var i = 0; i < group.length; i += totalYear) {
 			// Check any animal group is deselected
 			if (skipLst != null && skipLst.includes(i / totalYear)) continue;
@@ -114,7 +118,7 @@ function threatenedSpecies() {
 
 			for (var j = 0; j < totalYear - 1; j++) {
 				var yr = parseInt(year[i+j]);
-				var num = parseInt(number[i+j])
+				var num = parseInt(number[i+j]);
 				known_x.push(yr);
 				known_y.push(num);
 				
@@ -194,7 +198,7 @@ function threatenedSpecies() {
 					dash: 'dot',
 					color: colorGroup[i / totalYear]
 				},
-				hoverinfo: 'skip'
+				hoverinfo: 'none'
 			};
 
 			chart_data.push(trace);
@@ -213,7 +217,7 @@ function threatenedSpecies() {
 				gridcolor: '#454545',
 			},
 			yaxis: {
-				range: [0, 4000],
+				range: [0, 4500],
 				autorange: false,
 				zerolinecolor: '#454545',
 				gridcolor: '#454545',
@@ -228,16 +232,21 @@ function threatenedSpecies() {
 			dragmode: false
 		};
 
-		Plotly.newPlot(plotDiv, chart_data, chart_layout);
+		const config = {
+			// Only display the chart and hide other display elements
+		   displayModeBar: false
+		};
+
+		Plotly.newPlot(plotDiv, chart_data, chart_layout, config);
 
 		// Create the checkbox to allow users deselect any animal groups
 		if (!checkboxGenerated) {
-			generateCheckbox(group, totalYear, colorGroup);
+			generateCheckbox(group, number, totalYear, colorGroup);
 		}
 	})
 }
 
-function marineSpeciesPopulation() {
+function populationTrend() {
 	Plotly.d3.csv("csv/threaten-marine-species.csv", data => {
 		const plotDiv = document.getElementById('population-trend-plot');
 		let col = ['rgba(223, 46, 56, 1)', 'rgba(223, 46, 56, .45)', 'rgba(223, 46, 56, .35)'];
@@ -385,7 +394,12 @@ function seafoodConsumption(selectedYear) {
 			dragmode: false
 		};
 
-		Plotly.newPlot(plotDiv, chart_data, chart_layout);
+		const config = {
+			// Only display the chart and hide other display elements
+		displayModeBar: false
+		};
+
+	   	Plotly.newPlot(plotDiv, chart_data, chart_layout, config);
 	});
 }
 
@@ -395,28 +409,126 @@ function seafoodConsumption(selectedYear) {
 
 /* Additional chart */
 const isHover = e => e.parentElement.querySelector(':hover') === e;
+const curCountry = ["", ""];
+const plasticPollutionPlot = document.querySelector('#plastic-pollution > .plotly-container > .plot');
 const seafoodConsumptionPlot = document.querySelector('#seafood-demand > .plotly-container > .plot');
+const ppHighlight = document.querySelector('#plastic-pollution > .plotly-container > .country-plot-highlight');
+const scHighlight = document.querySelector('#seafood-demand > .plotly-container > .country-plot-highlight');
 const trendPlot = document.getElementById('trend-plot');
-document.addEventListener('mousemove', function checkHover() {
-	// Check if the chart is hovered https://stackoverflow.com/questions/14795099/pure-javascript-to-check-if-something-has-hover-without-setting-on-mouseover-ou
-	if (isHover(seafoodConsumptionPlot)) {
-		const hoverTemplate = document.querySelector('.hovertext > .nums');
+document.addEventListener('mousemove', () => {
+	const hoverTemplate = document.querySelector('.hovertext > .nums');
 		
-		// If any country is hovered and the hover template is showing, create a new chart that shows the country consumption trend
-		if (hoverTemplate != null) {
-			var country = hoverTemplate.firstChild.innerHTML.split(': ')[1];
-			var reverse = hoverTemplate.firstChild.getAttribute("x") < 0;
-			trendPlot.style.display = "block";
-			consumptionTrend(country, reverse);
+	// If any country is hovered and the hover template is showing, create a new chart that shows the country consumption trend
+	if (hoverTemplate != null && (isHover(plasticPollutionPlot) || isHover(seafoodConsumptionPlot))) {
+		var country = hoverTemplate.firstChild.innerHTML.split(': ')[1];
+		
+		// Check if the chart is hovered https://stackoverflow.com/questions/14795099/pure-javascript-to-check-if-something-has-hover-without-setting-on-mouseover-ou
+		// if (isHover(plasticPollutionPlot)) {
+		// 	// Avoid repetitive call to reduce resources usage
+		// 	if (country != curCountry[0]) {
+		// 		curCountry[0] = country;
+				
+		// 		ppHighlight.style.display = "block";
+		// 		countryHover(country, ppHighlight);
+		// 	}
+		// } else {
+		// 	// ppHighlight.style.display = "none";
+		// }
+
+		if (isHover(seafoodConsumptionPlot)) {
+			if (country != curCountry[1]) {
+				curCountry[1] = country;
+
+				// scHighlight.style.display = "block";
+				// countryHover(country, scHighlight);
+
+				var reverse = hoverTemplate.firstChild.getAttribute("x") < 0;
+				trendPlot.style.display = "block";
+				consumptionTrend(country, reverse);
+			}
 		} else {
+			// scHighlight.style.display = "none";
 			trendPlot.style.display = "none";
 		}
 	} else {
-		if (trendPlot.style.display != "none") {
-			trendPlot.style.display = "none";
-		}
+		// ppHighlight.style.display = "none";
+		// scHighlight.style.display = "none";
+		trendPlot.style.display = "none";
 	}
 });
+
+// Data retrieved from https://datahub.io/core/geo-countries
+// Reading a json file https://www.freecodecamp.org/news/how-to-read-json-file-in-javascript/
+async function countryHover(country, plotDiv) {
+    const response = await fetch('geo/archive/countries.geojson');
+    const geoMap = await response.json();
+    outlineCountry(country, geoMap, plotDiv);
+}
+
+// Based on the feecback from participants, I was trying to highlight the country when user hover over. I have successfully achieved the highlight feature by adding a new chart above
+// However, this will turn out block the interaction with the main map below, even I have disabled the interaction with the highlight map
+function outlineCountry(country, geoMap, plotDiv) {
+	// Highlighting a specific country https://plotly.com/javascript/mapbox-county-choropleth/
+	var countryCode = "";
+	var geoJson = [];	
+
+	for (var i = 0; i < geoMap.features.length; i++) {
+		if (geoMap.features[i].properties.ADMIN == country) {
+			countryCode = geoMap.features[i].properties.ISO_A3;
+			geoJson =  geoMap.features[i].geometry.coordinates;		
+		}
+	}
+
+	const chart_data = [{
+		type: 'choropleth',
+		locations: [countryCode],
+		z: [1],
+		geojson: geoJson, // Pass the GeoJSON data for the specific country
+		showscale: false,
+		colorscale: [
+			[0, 'rgba(0, 0, 0, 0)'], 
+			[1, 'rgba(0, 0, 0, 0)']
+		],
+		marker: {
+			line: {
+				color: '#fff333',
+				width: 3
+			}
+		},
+		hoverinfo: 'none'
+	}];
+		
+	// Create the layout for the plot
+	const chart_layout = {
+		geo: {
+			showcountries: false,
+			showframe: false,
+			bgcolor: 'rgba(0,0,0,0)',
+			projection: { type: 'mercator' },
+
+			// Hide Antartica as it has no data to show, this allows users to focus on the main objects 
+			// Concept inspired by https://stackoverflow.com/questions/73999494/how-to-remove-antarctica-from-plotly-world-map
+			lataxis: { range: [-3, 90] } 
+		},
+		margin: {
+			l: 0,
+			r: 0,
+			b: 30,
+			t: 100
+		},
+		responsive: true,
+		paper_bgcolor: 'rgba(0,0,0,0)',
+		plot_bgcolor: 'rgba(0,0,0,0)',
+		// Fix the plot to disable default scroll / drag movement (users can still do so by using the pan function)
+		dragmode: false 
+	};
+	
+	const config = {
+		displayModeBar: false
+	};
+
+	Plotly.newPlot(plotDiv, chart_data, chart_layout, config);
+}
 
 function consumptionTrend(selectedCountry, reverse) {
 	const plotDiv = document.getElementById('trend-plot');
@@ -512,13 +624,13 @@ function consumptionTrend(selectedCountry, reverse) {
 
 /* Sub functions */
 const mpwDivision = [0, 500, 1000, 3000, 5000, 10000, 20000, 30000, 50000, 70000, 100000, 300000];
-const mpwColorbar = ['#a1d6ff', '#7FB057', '#20a12b', '#107400', '#E2C768', '#ED993D', '#FF8500', '#FCDD2B', '#D74848', '#FA1717', '#b5006a', '#740090'];
-const chart1_colorbar = document.querySelector("#problem-cause > .plot-colorbar");
-const chart1_colorbarLst = document.querySelectorAll("#problem-cause > .plot-colorbar > span");
+const mpwColorbar = ['#7FB057', '#20a12b', '#107400', '#E2C768', '#ED993D', '#FF8500', '#f57f7f', '#D74848', '#FA1717', '#b5006a', '#740090', '#500063'];
+const chart1_colorbar = document.querySelector("#plastic-pollution > .plot-colorbar");
+const chart1_colorbarLst = document.querySelectorAll("#plastic-pollution > .plot-colorbar > span");
 let chart1_colorScale = [];
 
 const seafoodDivision = [0, 5, 10, 20, 30, 40, 50, 60, 80];
-const seafoodColorbar = ['#f5ece4','#e8ee90','#ddc798','#90ee90','#42bff5','#0099cc','#1e90ff','#24478f','#142952'];
+const seafoodColorbar = ['#f5ece4','#9fcecf','#86c1c2','#6acacc','#42bff5','#28a7d1','#1e90ff','#24478f','#142952'];
 const chart2_colorbar = document.querySelector("#seafood-demand > .plot-colorbar");
 const chart2_colorbarLst = document.querySelectorAll("#seafood-demand > .plot-colorbar > span");
 let chart2_colorScale = [];
@@ -641,32 +753,180 @@ function generateColorScale(division, colorLst, hover, selectedLst) {
 	return colorScale;
 }
 
+function generateColorbar(division, colorLst, container) {
+	for (var i = 0; i < colorLst.length; i++) {
+		// Using block scope to allow directly adding event listener that call on the object https://stackoverflow.com/questions/19586137/addeventlistener-using-for-loop-and-passing-values
+		let color = document.createElement("span");
+		color.style.backgroundColor = colorLst[i];
+
+		// Hover effect to focus inspired by this website https://ourworldindata.org/plastic-pollution#
+		// Onmouseover & onmouseout https://www.w3schools.com/jsref/event_onmouseover.asp
+		color.onmouseover = () => {
+            var index = colorBarHover(container);
+            // Generate a new color scale that only colors the countries that match the color
+            if (division == mpwDivision) {
+                chart1_colorScale = generateColorScale(division, colorLst, index, chart1_selectedLst);
+                plasticPollution();
+            } 
+            else {
+                chart2_colorScale = generateColorScale(division, colorLst, index, chart2_selectedLst);
+                yearIndicator();
+            }
+        }
+		color.onmouseout = () => {
+            // Reset the plot
+            setColorScale();
+            
+            if (division == mpwDivision) plasticPollution();
+            else yearIndicator();
+        };
+
+		color.addEventListener("click", () => {
+            if (division == mpwDivision) colorBarSelected(container, 1, color);
+            else colorBarSelected(container, 2, color);
+        });
+
+		container.appendChild(color);
+
+		var txt = document.createElement("p");
+		if (division == mpwDivision) txt.innerText = numAbbr(division[i]);
+		else txt.innerText = division[i];
+		color.appendChild(txt);
+	}
+}
+
+// Normalise function https://gist.github.com/Anthodpnt/aafeb0dc669fb9137dd0550b6f5d8630
+function norm(value, min, max) {
+    return (value - min) / (max - min);
+}
+  
+function addDecimal(num) {
+	// A function to ensure that the percent is actually greater than the actual (e.g. 0.34 -> 0.35)
+	if (num >= 1) return num;
+
+	const decimal = num.toString().split('.')[1] || '';
+	const decimalPlaces = decimal.length;
+
+	// Formula created by myself but Concept inspired by https://www.tutorialspoint.com/How-can-I-round-a-number-to-1-decimal-place-in-JavaScript
+	// Avoid no digit after the first digit
+	const numStr = num.toFixed(decimalPlaces + 1).toString().split(".")[1].split("");
+
+	var newNum = [0, "."];
+	for (var i = 0; i < numStr.length; i++) {
+		// First digit find
+		if (numStr[i] != "0") {
+			// Check whether it will adds up more than 9
+			if (numStr[i + 1] == 9) {
+				if (numStr[i] == 9) {
+					newNum[i - 1] = 1;
+					break
+				} else {
+					newNum.push(parseInt(numStr[i]) + 1);
+					break
+				}
+			}
+
+			newNum.push(parseInt(numStr[i]));
+			newNum.push(parseInt(numStr[i + 1]) + 1);
+			break;
+		} else {
+			newNum.push(0);
+		}
+	}
+
+	return newNum.join("");
+}
+
+function numAbbr(num) {
+	// A function to make the display into abbr form (e.g. 10000 -> 10k)
+	// Formula created by myself but inspired by https://stackoverflow.com/questions/2685911/is-there-a-way-to-round-numbers-into-a-reader-friendly-format-e-g-1-1k
+	var numSplit = num.toString().split('');
+	var newNum = [];
+
+	if (numSplit.length > 3 && numSplit.length < 7) {
+		for (var i = 0; i < numSplit.length - 3; i++) newNum.push(numSplit[i]);
+		return newNum.join("") + "k";
+	} else {
+		return num;
+	}
+}
 
 
 
+
+
+// Linear regression function that predicts the amount of threaten species 
+// Code was taken from https://stackoverflow.com/questions/6195335/linear-regression-in-javascript
+// Concept was learn from https://oliverjumpertz.com/simple-linear-regression-theory-math-and-implementation-in-javascript/
+function linearRegression(y, x) {
+	var lr = {};
+	var n = y.length;
+	var sum_x = 0;
+	var sum_y = 0;
+	var sum_xy = 0;
+	var sum_xx = 0;
+	var sum_yy = 0;
+
+	for (var i = 0; i < y.length; i++) {
+
+		sum_x += x[i];
+		sum_y += y[i];
+		sum_xy += (x[i] * y[i]);
+		sum_xx += (x[i] * x[i]);
+		sum_yy += (y[i] * y[i]);
+	}
+
+	lr['slope'] = (n * sum_xy - sum_x * sum_y) / (n * sum_xx - sum_x * sum_x);
+	lr['intercept'] = (sum_y - lr.slope * sum_x) / n;
+	lr['r2'] = Math.pow((n * sum_xy - sum_x * sum_y) / Math.sqrt((n * sum_xx - sum_x * sum_x) * (n * sum_yy - sum_y * sum_y)), 2);
+
+	return lr;
+}
 
 var checkboxGenerated = false;
-function generateCheckbox(lst, num, colorGroup) {
+function generateCheckbox(lst, num, totalYear, colorGroup) {
+	var checkboxGroup = [];
+	for (var i = 0; i < lst.length; i += totalYear) {
+		var group = []
+
+		// Animal group name
+		group.push(lst[i]);
+
+		// Animal number (In 2016)
+		group.push(parseInt(num[i + (totalYear - 7)]));
+
+		// Animal index
+		group.push(i / totalYear);
+
+		checkboxGroup.push(group);
+	}
+
+	checkboxGroup.sort((a, b) => {
+		if (a[1] > b[1]) return -1;
+		else if (a[1] < b[1]) return 1;
+		else return 0
+	});
+
 	// Generate checkboxs for each animal group and color them with their color on the plot
 	const container = document.querySelector(".checkbox-container");
-	for (var i = 0; i < lst.length; i += num) {
+	for (var i = 0; i < checkboxGroup.length; i ++) {
 		let parent = document.createElement("div");
 
 		let checkbox = document.createElement("div");
 		checkbox.setAttribute("class", "checkbox");
-		checkbox.style.color = colorGroup[i / num];
+		checkbox.style.color = colorGroup[checkboxGroup[i][2]];
 		parent.appendChild(checkbox);
 
 		let input = document.createElement("input");
 		input.setAttribute("type", "checkbox");
-		input.setAttribute("name", lst[i]);
-		input.setAttribute("value", i / num);
+		input.setAttribute("name", checkboxGroup[i][0]);
+		input.setAttribute("value", checkboxGroup[i][2]);
 		input.checked = true;
 		checkbox.appendChild(input);
 
 		let label = document.createElement("label");
-		label.setAttribute("for", lst[i]);
-		label.innerText = lst[i];
+		label.setAttribute("for", checkboxGroup[i][0]);
+		label.innerText = checkboxGroup[i][0];
 		checkbox.appendChild(label);
 
 		input.onchange = threatenedSpecies;
@@ -676,8 +936,6 @@ function generateCheckbox(lst, num, colorGroup) {
 	// Stop generating new checkbox when building the plot
 	checkboxGenerated = true;
 }
-
-
 
 
 

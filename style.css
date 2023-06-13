@@ -44,6 +44,10 @@ p {
 	margin: 0;
 }
 
+.main > p > strong {
+	color: #ffce85;
+}
+
 .centerTxt {
 	margin: 0;
 	padding: 12.5vh 0 5vh;
@@ -86,11 +90,19 @@ p {
 	height: 100%;
 }
 
+.country-plot-highlight {
+	position: absolute;
+	top: 0;
+
+	/* Avoid hover event https://www.w3docs.com/snippets/css/how-to-remove-the-css-hover-behavior-from-an-element.html */
+	pointer-events: none !important;
+}
+
 /* Stylising the colorbar that was created from scratch */
 .plot-colorbar {
 	height: 2vh;
 	width: 70%;
-	padding-top: 3vh;
+	padding-top: 10px;
 	margin: auto;
 	
 	display: flex;
@@ -120,6 +132,17 @@ p {
 	width: 100%;
 	text-align: center;
 	font-size: 1.25vh;
+}
+
+.colorbar-instruction {
+	width: 100%;
+	margin: auto;
+	padding-top: 20px;
+
+	font-size: 14px;
+	text-align: center;
+
+	color: #8E8E8E;
 }
 
 .colorbar-unit {
@@ -610,7 +633,7 @@ p {
 
 #brief>.main>p {
 	width: 70%;
-	color: #707070;
+	color: #3e3e3e;
 }
 
 /* Adding background color to the text to ensure the readability */
@@ -698,19 +721,18 @@ p {
 
 
 
-
-#problem-cause {
+#plastic-pollution {
 	margin: 0;
 	padding-bottom: 30px;
 	position: relative;
 	background: linear-gradient(0deg, rgba(0, 0, 0, 0.95) 0%, #0A2745 100%);
 }
 
-#problem-cause > div.main.centerTxt {
+#plastic-pollution > div.main.centerTxt {
 	padding-top: 7vh;
 }
 
-/* End of background section */
+/* End of problem section */
 
 
 

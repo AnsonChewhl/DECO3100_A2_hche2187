@@ -33,7 +33,7 @@
 						<span class="hori-line"></span>
 					</li>
 					<li class="navbar-item">
-						<a class="navbar-link" onclick="sectionJump(1)">Background</a>
+						<a class="navbar-link" onclick="sectionJump(1)">Problem</a>
 						<span class="hori-line"></span>
 					</li>
 					<li class="navbar-item">
@@ -87,23 +87,24 @@
 			</section>
 		</article>
 
-		<!-- Background information section: Providing readers a brief understanding on how much plastic waste we have emitted to the ocean -->
-		<article id="background" class="main-section">
-			<section id="problem-cause">
+		<!-- Problem information section: Providing readers a brief understanding on how much plastic waste we have emitted to the ocean -->
+		<article id="problem" class="main-section">
+			<section id="plastic-pollution">
 				<div class="main centerTxt">
-					<p>Have you ever seen any plastic bottles when walking on the beach? Where do you think they came from? It’s common to see plastic floating in the ocean but no one may report it. Thus, the amount of plastic in surface waters is not very well known. However, in estimation, Our World In Data reported that the amount ranges from 10,000 to 100,000 tonnes. Let’s check how much mismanaged plastic waste (MPW) each person was responsible for in different countries.</p>
+					<p>Have you ever seen any <strong>plastic bottles</strong> when walking on the beach? Where do you think they came from? It’s common to see plastic floating in the ocean but no one may report it. Thus, the amount of plastic in surface waters is not very well known. However, in estimation, Our World In Data reported that the amount ranges <strong>from 10,000 to 100,000 tonnes</strong>. Let’s check how much <strong>mismanaged plastic waste</strong> (MPW) each person was responsible for in different countries.</p>
 				</div>
 
 				<div class="plotly-container">
 					<!-- To have more responsiveness controls, the title was created seperately from Plotly.js -->
 					<h3 class="plot-header">Amount of mismanaged plastic waste (MPW) emitted to the ocean in 2021</h3>
 					<div class="plot" id="plastic-pollution-plot"></div>
+					<div class="plot country-plot-highlight" style="display: none;"></div>
 				</div>
 
 				<!-- To add extra hovering function and increase the usability, the colorbar was created from scratch -->
+				<p class="colorbar-instruction">(Hover / Click to filter specific groups)</p>
 				<div class="plot-colorbar"></div>
-
-				<p class="colorbar-unit">(<strong>tons</strong> as the unit)</p>
+				<p class="colorbar-unit"><strong>tons</strong> as the unit</p>
 			</section>
 
 			<!-- As an online data journalism, it is important to answer the "So, what" question that readers may have https://www.tandfonline.com/doi/full/10.1080/17439884.2013.848454  -->
@@ -124,9 +125,9 @@
 			<section id="threaten-species">
 				<div class="main">
 					<h2>Endangered aquatic species are threatened with extinction</h2>
-					<p>There are aquatic species’ (animals that live in water) populations decreasing at an alarming rate and being considered endangered (facing a very high risk of extinction). “Fishes” is the only animal group that has over 3000 endangered animals. Numerous causes devastate their population, such as climate change and water pollution. IUCN revealed that Plastic pollution is threatening their size as it degrades the water quality. <br> <br> The data from 2012 to 2021 was collected and used linear regression to predict the potential number of threatened species in the future. The predictions are mostly lining up with the actual value in 2022. However, most of them have underestimated the actual value in 2022. Thus, we should consider this, especially since the amount of threatened species has a high risk of rising.</p>
+					<p>There are aquatic species’ (animals that live in water) populations decreasing at an  <strong>alarming rate</strong> and being considered endangered (facing a very high risk of extinction). “Fishes” is the only animal group that has <strong>over 3000 endangered animals</strong>. Numerous causes devastate their population, such as climate change and water pollution. IUCN revealed that <strong>plastic pollution</strong> is threatening their size as it degrades the water quality. <br> <br> The data from 2016 to 2021 was collected and used linear regression to predict the potential number of threatened species in the future. The predictions are <strong>mostly lining up</strong> with the actual value in 2022. However, most of them have <strong>underestimated</strong> the actual value. Thus, we should consider this, especially since the amount of threatened species has a high risk of rising.</p>
 				</div>
-				<div class="plotly-container" style="width: 80%; height: 600px;">
+				<div class="plotly-container" style="width: 80%; height: 650px;">
 					<h3 class="plot-header">Number of species threatened with extinction (Animals)</h3>
 					<div class="plot" id="threaten-species-plot"></div>
 				</div>
@@ -140,14 +141,14 @@
 				<div>
 					<div class="main">
 						<h2>Most of the threatened aquatic species' population is decreasing</h2>
-						<p>Due to plastic waste being emitted to the ocean, the loggerhead sea turtles (the world's largest hard-shelled turtle) are listed as endangered. Additionally, according to Condor Ferries, over 1 million seabirds and 100,000 marine species die from plastic pollution every year. Ocean Conservancy added that plastic has been found in more than 60% of all seabirds and in 100% of sea turtles species that mistake plastic for food.</p>
+						<p>Due to plastic waste being emitted to the ocean, the <strong>loggerhead sea turtles</strong> (the world's largest hard-shelled turtle) are listed as endangered. Additionally, according to Condor Ferries, over 1 million seabirds and 100,000 marine species <strong>die from plastic pollution</strong> every year. Ocean Conservancy added that plastic has been found in more than 60% of all seabirds and in 100% of sea turtles species that <strong>mistake plastic for food</strong>.</p>
 					</div>
 					<div class="plotly-container">
 						<h3 class="plot-header">Marine species threatened by waste pollution (Population trend)</h3>
 						<div class="plot" id="population-trend-plot"></div>
 					</div>
 					<div class="main">
-						<p>Besides that, there are a number of whales threatened by plastic pollution, such as blue whales, the largest animal known to ever exist. How are they affected? ABC news reported that a sperm whale was washed up on a beach in Spain and died due to nearly 30 kg of trash, including plastic, that blocked its digestive system.</p>
+						<p>Besides that, there are a number of whales threatened by plastic pollution, such as <strong>blue whales</strong>, the largest animal known to ever exist. How are they affected? ABC news reported that a sperm whale was washed up on a beach in Spain and died due to nearly <strong>30 kg of trash</strong>, including plastic, that blocked its <strong>digestive system</strong>.</p>
 					</div>
 				</div>
 			</section>
@@ -155,17 +156,18 @@
 			<!-- Providing supporting evidences on the relation between plastic pollution and marine species -->
 			<section class="recommendation">
 				<div>
-					<img alt="" src="image/section_situation/news/news1.png">
+					<img alt="A photo of a whale being washed up to the beach and with many rubbish inside its stomach" src="image/section_situation/news/news1.png">
 					<h3>About 70% of deep sea fishes mistake plastic for food</h3>
 					<p>WWF revealed that 70% of deep-sea fish (e.g. tuna, grouper & shark) have eaten plastic.
 						Furthermore, it was proved that some popular dinner time favourites (e.g. oysters, mussels &
 						sardines) consumed plastic when they were at the fisheries.</p>
+					<!-- Don’t use "Learn more" as the text https://www.nngroup.com/articles/learn-more-links/ -->
 					<a class="learn-more"
 						href="https://wwf.org.au/blogs/plastic-fish-and-the-great-pacific-garbage-patch/"
 						target="_blank">Why fishes consume and eat plastic >></a>
 				</div>
 				<div>
-					<img alt="" src="image/section_situation/news/news2.png">
+					<img alt="A photo of a sea turtle being entangled by a plastic bag on its neck" src="image/section_situation/news/news2.png">
 					<h3>Marine species are entangled by plastic debris</h3>
 					<p>Apart from mistaking plastic for food, some marine species are entangled by plastic, especially
 						abandoned fishing gear. Those species cannot breathe when they are entangled in plastic. Then,
@@ -175,7 +177,7 @@
 						target="_blank">Abandoned fishing gear impacts >></a>
 				</div>
 				<div>
-					<img alt="" src="image/section_situation/news/news3.png">
+					<img alt="A photo of a seabird flying across the ocean" src="image/section_situation/news/news3.png">
 					<h3>Plastic waste is also impacting the whole ecosystem</h3>
 					<p>Plastic releases greenhouse gases during the manufacturing and biodegrading process. Greenhouse
 						gases may increase the frequency of extreme weather, which threatens not only marine life but
@@ -204,18 +206,20 @@
 			<section id="seafood-demand">
 				<div class="main">
 					<h2>An increasing demand for seafood worldwide</h2>
-					<p>As you can see from the data below, our demand for seafood has been increasing throughout the past thirty years. Undoubtedly, this uptrend will continue in the future. Besides, we should notice this as a signal that we have to keep the marine clean and safe. It is because there is evidence that microplastics and nanoplastics (tiny, almost undetectable, pieces of plastic) can move from a fish’s stomach to its muscle tissue. McInturf & Savoca mentioned that this is the part that we typically eat. </p>
+					<p>As you can see from the data below, our demand for seafood has been <strong>increasing throughout the past thirty years</strong>. Undoubtedly, this uptrend will continue in the future. Besides, we should notice this as a signal that we have to <strong>keep the marine clean and safe</strong>. It is because there is evidence that microplastics and nanoplastics (tiny, almost undetectable, pieces of plastic) can move from a fish’s stomach to its muscle tissue. McInturf & Savoca mentioned that this is <strong>the part that we typically eat</strong>.</p>
 				</div>
 
 				<div class="plotly-container">
 					<h3 class="plot-header">Global fish & seafood consumption per capita from 1990 to 2020</h3>
 					<div class="plot" id="seafood-demand-plot"></div>
+					<div class="plot country-plot-highlight" style="display: none;"></div>
 					<div id="trend-plot"></div>
 				</div>
 
 				<!-- To add extra hovering function and increase the usability, the colorbar was created from scratch -->
+				<p class="colorbar-instruction">(Hover / Click to filter specific groups)</p>
 				<div class="plot-colorbar" style="width: 60%;"></div>
-				<p class="colorbar-unit">(<strong>kg</strong> as the unit)</p>
+				<p class="colorbar-unit"><strong>kg</strong> as the unit</p>
 
 				<!-- Allowing the users to see the changes through animation -->
 				<div class="slidecontainer">
@@ -226,25 +230,21 @@
 				</div>
 
 				<div class="main" style="padding: 1.5vh 0 1vh 10%;">
-					<p>As we are subjected to long-term exposure to nanoplastics at low concentrations, it is hard to tell the impact of consuming fish with little nanoplastics inside. However,  Lai et al. study showed that excessive nanoplastics intake will destroy our cell membrane structure leading to cell death. Also, Domenech et al. reported that it may accumulate in different organs and tissues and may induce in the long term the development of cancer.</p>
+					<p>As we are subjected to long-term exposure to <strong>nanoplastics at low concentrations</strong>, it is hard to tell the impact of consuming fish with little nanoplastics inside. However,  Lai et al. study showed that excessive nanoplastics intake will destroy our cell membrane structure leading to <strong>cell death</strong>. Also, Domenech et al. reported that it may accumulate in different organs and tissues and may induce in the long term the <strong>development of cancer</strong>.</p>
 				</div>
 			</section>
 
 			<section>
 				<div class="main">
 					<h2>So, what can we do?</h2>
-					<p>Everyone can do something to help solve the plastic pollution problem, and a lot of people
-						worldwide are already taking action to lower their plastic use. It’s not necessary to spend any
-						to help address the plastic waste issue. Waste minimization can reduce plastic waste emitted to
-						the ocean, which protects the biodiversity of marine species. We can achieve this by focusing on
-						the first of the 3Rs (reducing, reusing and recycling).</p>
+					<p>Everyone can do something to help solve the plastic pollution problem, and millions of people worldwide are already taking action to <strong>lower their plastic use</strong>. It’s not necessary to spend any to help address the plastic waste issue. Waste minimization can <strong>reduce plastic waste</strong> emitted to the ocean, which protects the biodiversity of marine species. We can achieve this by focusing on the first of the 3Rs (reducing, reusing and recycling). </p>
 				</div>
 			</section>
 
 			<!-- Providing suggestions for the readers on how to tackle the plastic waste problem -->
 			<section class="recommendation">
 				<div>
-					<img alt="" src="image/section_impact/3rs/reduce.png">
+					<img alt="A photo of six forks, in which five of them are wooden forks but the remaining one is a red colour plastic fork" src="image/section_impact/3rs/reduce.png">
 					<h3>Using sustainable alternatives to single-use plastics</h3>
 					<p>Plastic products are a convenient option whether it is on the go or at home. However, these
 						products can be problematic when it comes to their disposal. To reduce the amount of plastic
@@ -254,7 +254,7 @@
 						target="_blank">More sustainable selections >></a>
 				</div>
 				<div>
-					<img alt="" src="image/section_impact/3rs/reuse.png">
+					<img alt="A photo of some plastic water bottles being reused for gardening" src="image/section_impact/3rs/reuse.png">
 					<h3>Decorating your home with the DIY creation ideas </h3>
 					<p>Reuse means we repurpose the plastic for a second life. As simple as washing and reusing plastic
 						sandwich bags. This helps us to save the purchasing and replacing costs. Compared to directly
@@ -264,7 +264,7 @@
 						target="_blank">Creative ideas to reuse plastic >></a>
 				</div>
 				<div>
-					<img alt="" src="image/section_impact/3rs/recycle.png">
+					<img alt="A photo of someone carrying two bags of plastic" src="image/section_impact/3rs/recycle.png">
 					<h3>Recycle plastic bottles to make pocket money</h3>
 					<p>Plastic recycling reduces the need to extract new, raw materials from the earth as it reuses the
 						stuff that's already processed and protects natural resources. It reduces greenhouse gases

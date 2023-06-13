@@ -1,5 +1,5 @@
 // Check the users window width and height for testing purpose
-confirm(`Window width x height: ${window.innerWidth} x ${window.innerHeight}`);
+// confirm(`Window width x height: ${window.innerWidth} x ${window.innerHeight}`);
 
 // Functions to call when the page finishes loading
 document.addEventListener('DOMContentLoaded', () => {
@@ -54,13 +54,14 @@ function contentUpdate() {
         console.warn(e);
     }
     
-    sectionOffsetCheck(); // Re-calculate the offset position of each section
+    // Re-calculate the offset position of each section
+    sectionOffsetCheck();
 }
 
 function buildPlots() {
 	plasticPollution();
 	threatenedSpecies();
-	marineSpeciesPopulation();
+	populationTrend();
     yearIndicator();
 }
 
@@ -137,133 +138,6 @@ function parallaxDishScale(scrollPosition, obj, initialSize, finalSize) {
         obj.style.backgroundSize = `${finalSize}%`;
     }
 }
-
-function generateColorbar(division, colorLst, container) {
-	for (var i = 0; i < colorLst.length; i++) {
-		// Using block scope to allow directly adding event listener that call on the object https://stackoverflow.com/questions/19586137/addeventlistener-using-for-loop-and-passing-values
-		let color = document.createElement("span");
-		color.style.backgroundColor = colorLst[i];
-
-		// Hover effect to focus inspired by this website https://ourworldindata.org/plastic-pollution#
-		// Onmouseover & onmouseout https://www.w3schools.com/jsref/event_onmouseover.asp
-		color.onmouseover = () => {
-            var index = colorBarHover(container);
-            // Generate a new color scale that only colors the countries that match the color
-            if (division == mpwDivision) {
-                chart1_colorScale = generateColorScale(division, colorLst, index, chart1_selectedLst);
-                plasticPollution();
-            } 
-            else {
-                chart2_colorScale = generateColorScale(division, colorLst, index, chart2_selectedLst);
-                yearIndicator();
-            }
-        }
-		color.onmouseout = () => {
-            // Reset the plot
-            setColorScale();
-            
-            if (division == mpwDivision) plasticPollution();
-            else yearIndicator();
-        };
-
-		color.addEventListener("click", () => {
-            if (division == mpwDivision) colorBarSelected(container, 1, color);
-            else colorBarSelected(container, 2, color);
-        });
-
-		container.appendChild(color);
-
-		var txt = document.createElement("p");
-		if (division == mpwDivision) txt.innerText = numAbbr(division[i]);
-		else txt.innerText = division[i];
-		color.appendChild(txt);
-	}
-}
-
-// Normalise function https://gist.github.com/Anthodpnt/aafeb0dc669fb9137dd0550b6f5d8630
-function norm(value, min, max) {
-    return (value - min) / (max - min);
-}
-  
-function addDecimal(num) {
-	// A function to ensure that the percent is actually greater than the actual (e.g. 0.34 -> 0.35)
-	if (num >= 1) return num;
-
-	const decimal = num.toString().split('.')[1] || '';
-	const decimalPlaces = decimal.length;
-
-	// Formula created by myself but Concept inspired by https://www.tutorialspoint.com/How-can-I-round-a-number-to-1-decimal-place-in-JavaScript
-	// Avoid no digit after the first digit
-	const numStr = num.toFixed(decimalPlaces + 1).toString().split(".")[1].split("");
-
-	var newNum = [0, "."];
-	for (var i = 0; i < numStr.length; i++) {
-		// First digit find
-		if (numStr[i] != "0") {
-			// Check whether it will adds up more than 9
-			if (numStr[i + 1] == 9) {
-				if (numStr[i] == 9) {
-					newNum[i - 1] = 1;
-					break
-				} else {
-					newNum.push(parseInt(numStr[i]) + 1);
-					break
-				}
-			}
-
-			newNum.push(parseInt(numStr[i]));
-			newNum.push(parseInt(numStr[i + 1]) + 1);
-			break;
-		} else {
-			newNum.push(0);
-		}
-	}
-
-	return newNum.join("");
-}
-
-function numAbbr(num) {
-	// A function to make the display into abbr form (e.g. 10000 -> 10k)
-	// Formula created by myself but inspired by https://stackoverflow.com/questions/2685911/is-there-a-way-to-round-numbers-into-a-reader-friendly-format-e-g-1-1k
-	var numSplit = num.toString().split('');
-	var newNum = [];
-
-	if (numSplit.length > 3 && numSplit.length < 7) {
-		for (var i = 0; i < numSplit.length - 3; i++) newNum.push(numSplit[i]);
-		return newNum.join("") + "k";
-	} else {
-		return num;
-	}
-}
-
-// Linear regression function that predicts the amount of threaten species 
-// Code was taken from https://stackoverflow.com/questions/6195335/linear-regression-in-javascript
-// Concept was learn from https://oliverjumpertz.com/simple-linear-regression-theory-math-and-implementation-in-javascript/
-function linearRegression(y, x) {
-	var lr = {};
-	var n = y.length;
-	var sum_x = 0;
-	var sum_y = 0;
-	var sum_xy = 0;
-	var sum_xx = 0;
-	var sum_yy = 0;
-
-	for (var i = 0; i < y.length; i++) {
-
-		sum_x += x[i];
-		sum_y += y[i];
-		sum_xy += (x[i] * y[i]);
-		sum_xx += (x[i] * x[i]);
-		sum_yy += (y[i] * y[i]);
-	}
-
-	lr['slope'] = (n * sum_xy - sum_x * sum_y) / (n * sum_xx - sum_x * sum_x);
-	lr['intercept'] = (sum_y - lr.slope * sum_x) / n;
-	lr['r2'] = Math.pow((n * sum_xy - sum_x * sum_y) / Math.sqrt((n * sum_xx - sum_x * sum_x) * (n * sum_yy - sum_y * sum_y)), 2);
-
-	return lr;
-}
-
 
 
 
